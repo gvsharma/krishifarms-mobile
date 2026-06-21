@@ -20,6 +20,9 @@ data class TokenResponse(
     @SerialName("refresh_token") val refreshToken: String,
     @SerialName("token_type") val tokenType: String = "bearer",
     val user: UserDto? = null,
+    val roles: List<String> = emptyList(),
+    val permissions: List<String> = emptyList(),
+    @SerialName("accessibleModules") val accessibleModules: List<String> = emptyList(),
 )
 
 @Serializable
@@ -28,6 +31,9 @@ data class LoginResponse(
     @SerialName("refresh_token") val refreshToken: String,
     @SerialName("token_type") val tokenType: String = "bearer",
     val user: UserDto? = null,
+    val roles: List<String> = emptyList(),
+    val permissions: List<String> = emptyList(),
+    @SerialName("accessibleModules") val accessibleModules: List<String> = emptyList(),
 )
 
 @Serializable

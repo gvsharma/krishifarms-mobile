@@ -25,6 +25,7 @@ android {
         }
 
         buildConfigField("String", "API_BASE_URL", "\"https://api.krishifarms.com/api/v1/\"")
+        buildConfigField("boolean", "RBAC_STRICT_MODE", "true")
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
@@ -35,6 +36,7 @@ android {
         debug {
             isMinifyEnabled = false
             buildConfigField("String", "API_BASE_URL", "\"https://api-staging.krishifarms.com/api/v1/\"")
+            buildConfigField("boolean", "RBAC_STRICT_MODE", "false")
         }
         release {
             isMinifyEnabled = true
@@ -113,6 +115,7 @@ dependencies {
     implementation(libs.androidx.camera.view)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
