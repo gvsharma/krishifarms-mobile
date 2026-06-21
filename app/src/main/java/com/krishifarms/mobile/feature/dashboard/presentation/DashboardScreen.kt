@@ -1,6 +1,6 @@
 package com.krishifarms.mobile.feature.dashboard.presentation
 
-import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,18 +40,6 @@ import com.krishifarms.mobile.feature.dashboard.presentation.components.Dashboar
 import java.text.DateFormat
 import java.util.Date
 
-@StringRes
-val DashboardCardType.labelRes: Int
-    get() = when (this) {
-        DashboardCardType.TODAYS_PROCUREMENT -> R.string.dashboard_card_todays_procurement
-        DashboardCardType.TODAYS_EXPENSES -> R.string.dashboard_card_todays_expenses
-        DashboardCardType.TODAYS_COLLECTIONS -> R.string.dashboard_card_todays_collections
-        DashboardCardType.PENDING_FARMER_PAYMENTS -> R.string.dashboard_card_pending_farmer_payments
-        DashboardCardType.PENDING_COLLECTIONS -> R.string.dashboard_card_pending_collections
-        DashboardCardType.WORKER_ATTENDANCE -> R.string.dashboard_card_worker_attendance
-        DashboardCardType.ACTIVE_RENTALS -> R.string.dashboard_card_active_rentals
-    }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
@@ -78,7 +66,9 @@ fun DashboardScreen(
         is DashboardUiState.Success -> PullToRefreshBox(
             isRefreshing = state.isRefreshing,
             onRefresh = viewModel::refresh,
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
         ) {
             DashboardContent(
                 state = state,
@@ -100,6 +90,13 @@ private fun DashboardContent(
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        Text(
+            text = stringResource(R.string.nav_dashboard),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(top = 16.dp),
+        )
+
         val subtitle = buildString {
             append(
                 stringResource(
@@ -117,7 +114,6 @@ private fun DashboardContent(
             text = subtitle,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 8.dp),
         )
 
         LazyVerticalGrid(
@@ -145,17 +141,20 @@ private fun DashboardContent(
 @Composable
 private fun DashboardLoadingState(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             Text(
                 text = stringResource(R.string.common_loading),
                 style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
@@ -167,7 +166,9 @@ private fun DashboardEmptyState(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -177,7 +178,7 @@ private fun DashboardEmptyState(
         ) {
             Text(
                 text = stringResource(R.string.dashboard_empty_title),
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center,
             )
             Text(
@@ -200,7 +201,9 @@ private fun DashboardErrorState(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -212,7 +215,7 @@ private fun DashboardErrorState(
         ) {
             Text(
                 text = stringResource(R.string.common_error),
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center,
             )
             Text(

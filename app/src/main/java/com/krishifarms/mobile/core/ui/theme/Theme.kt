@@ -13,35 +13,57 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val LightColorScheme = lightColorScheme(
-    primary = GreenPrimary,
-    onPrimary = OnGreenPrimary,
-    primaryContainer = GreenPrimaryLight,
-    onPrimaryContainer = OnSurfaceDark,
-    secondary = GreenSecondary,
-    onSecondary = OnGreenPrimary,
-    tertiary = GreenTertiary,
-    background = FieldBackground,
-    onBackground = OnSurfaceDark,
-    surface = SurfaceLight,
-    onSurface = OnSurfaceDark,
-    error = ErrorRed,
-    onError = OnGreenPrimary,
+    primary = CanopiaGreen,
+    onPrimary = Color.White,
+    primaryContainer = CanopiaMint,
+    onPrimaryContainer = CanopiaGreen,
+    secondary = CanopiaTeal,
+    onSecondary = Color.White,
+    secondaryContainer = Color(0xFFB7E4DB),
+    onSecondaryContainer = Color(0xFF0D3D36),
+    tertiary = CanopiaLime,
+    onTertiary = CanopiaForestText,
+    tertiaryContainer = Color(0xFFE8F5C8),
+    onTertiaryContainer = Color(0xFF2D3A0F),
+    background = CanopiaSageBackground,
+    onBackground = CanopiaForestText,
+    surface = CanopiaSurface,
+    onSurface = CanopiaForestText,
+    surfaceVariant = CanopiaSurfaceVariant,
+    onSurfaceVariant = CanopiaMutedText,
+    outline = CanopiaOutline,
+    outlineVariant = Color(0xFFD4DDD4),
+    error = CanopiaError,
+    onError = Color.White,
+    errorContainer = Color(0xFFFFDAD6),
+    onErrorContainer = Color(0xFF410002),
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = GreenPrimaryLight,
-    onPrimary = OnSurfaceDark,
-    primaryContainer = GreenPrimaryDark,
-    onPrimaryContainer = OnGreenPrimary,
-    secondary = GreenSecondary,
-    onSecondary = OnGreenPrimary,
-    tertiary = HarvestGold,
-    background = OnSurfaceDark,
-    onBackground = SurfaceLight,
-    surface = Color(0xFF1A1C18),
-    onSurface = SurfaceLight,
-    error = ErrorRed,
-    onError = OnGreenPrimary,
+    primary = CanopiaDarkPrimary,
+    onPrimary = CanopiaDarkBackground,
+    primaryContainer = Color(0xFF1B4332),
+    onPrimaryContainer = CanopiaMint,
+    secondary = Color(0xFF6DD5C4),
+    onSecondary = CanopiaDarkBackground,
+    secondaryContainer = Color(0xFF0D3D36),
+    onSecondaryContainer = Color(0xFFB7E4DB),
+    tertiary = CanopiaLime,
+    onTertiary = CanopiaDarkBackground,
+    tertiaryContainer = Color(0xFF3D4F1A),
+    onTertiaryContainer = Color(0xFFE8F5C8),
+    background = CanopiaDarkBackground,
+    onBackground = CanopiaDarkOnSurface,
+    surface = CanopiaDarkSurface,
+    onSurface = CanopiaDarkOnSurface,
+    surfaceVariant = CanopiaDarkSurfaceVariant,
+    onSurfaceVariant = Color(0xFF9EAE9E),
+    outline = Color(0xFF4A5A4A),
+    outlineVariant = Color(0xFF2E3A2E),
+    error = Color(0xFFFFB4AB),
+    onError = Color(0xFF690005),
+    errorContainer = Color(0xFF93000A),
+    onErrorContainer = Color(0xFFFFDAD6),
 )
 
 @Composable
@@ -55,7 +77,7 @@ fun KrishiFarmsTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = colorScheme.background.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
@@ -63,6 +85,7 @@ fun KrishiFarmsTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes = KrishiFarmsShapes,
         content = content,
     )
 }
