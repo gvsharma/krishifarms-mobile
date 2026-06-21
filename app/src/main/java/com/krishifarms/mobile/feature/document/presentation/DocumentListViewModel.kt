@@ -15,14 +15,21 @@ import javax.inject.Inject
 data class DocumentListUiState(
     val documents: List<Document> = emptyList(),
     val isLoading: Boolean = true,
+    val canUpload: Boolean = false,
 )
 
 @HiltViewModel
 class DocumentListViewModel @Inject constructor(
     private val documentRepository: DocumentRepository,
+    permissionManager: com.krishifarms.mobile.core.security.rbac.PermissionManager,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(DocumentListUiState())
+    private val _uiState = MutableStateFlow(
+        DocumentListUiState(
+            canUpload = com.krishifarms.mobile.core.security.rbac.ActionPermissions
+                .from(permissionManager).document.canUpload,
+        ),
+    )
     val uiState: StateFlow<DocumentListUiState> = _uiState.asStateFlow()
 
     init {

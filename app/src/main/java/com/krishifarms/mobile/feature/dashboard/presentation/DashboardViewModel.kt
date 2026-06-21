@@ -1,8 +1,12 @@
 package com.krishifarms.mobile.feature.dashboard.presentation
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krishifarms.mobile.core.common.Resource
+import com.krishifarms.mobile.R
+import com.krishifarms.mobile.core.security.session.SessionManager
+import com.krishifarms.mobile.core.security.rbac.DashboardCardAccess
 import com.krishifarms.mobile.feature.dashboard.domain.model.DashboardMetric
 import com.krishifarms.mobile.feature.dashboard.domain.model.DashboardSummary
 import com.krishifarms.mobile.feature.dashboard.domain.repository.DashboardRepository
@@ -24,6 +28,19 @@ enum class DashboardCardType {
     PENDING_COLLECTIONS,
     WORKER_ATTENDANCE,
     ACTIVE_RENTALS,
+    ;
+
+    val labelRes: Int
+        @StringRes
+        get() = when (this) {
+            TODAYS_PROCUREMENT -> R.string.dashboard_card_todays_procurement
+            TODAYS_EXPENSES -> R.string.dashboard_card_todays_expenses
+            TODAYS_COLLECTIONS -> R.string.dashboard_card_todays_collections
+            PENDING_FARMER_PAYMENTS -> R.string.dashboard_card_pending_farmer_payments
+            PENDING_COLLECTIONS -> R.string.dashboard_card_pending_collections
+            WORKER_ATTENDANCE -> R.string.dashboard_card_worker_attendance
+            ACTIVE_RENTALS -> R.string.dashboard_card_active_rentals
+        }
 }
 
 data class DashboardCardUiModel(
@@ -53,6 +70,7 @@ sealed interface DashboardUiState {
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val dashboardRepository: DashboardRepository,
+    private val sessionManager: SessionManager,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<DashboardUiState>(DashboardUiState.Loading)
@@ -134,6 +152,7 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun DashboardSummary.toCards(): List<DashboardCardUiModel> {
+        val visible = DashboardCardAccess.visibleCards(sessionManager.session.value)
         return listOf(
             DashboardCardUiModel(DashboardCardType.TODAYS_PROCUREMENT, todaysProcurement),
             DashboardCardUiModel(DashboardCardType.TODAYS_EXPENSES, todaysExpenses),
@@ -142,7 +161,7 @@ class DashboardViewModel @Inject constructor(
             DashboardCardUiModel(DashboardCardType.PENDING_COLLECTIONS, pendingCollections),
             DashboardCardUiModel(DashboardCardType.WORKER_ATTENDANCE, workerAttendance),
             DashboardCardUiModel(DashboardCardType.ACTIVE_RENTALS, activeRentals),
-        )
+        ).filter { it.type in visible }
     }
 
     private fun DashboardSummary.isEmptySummary(): Boolean {

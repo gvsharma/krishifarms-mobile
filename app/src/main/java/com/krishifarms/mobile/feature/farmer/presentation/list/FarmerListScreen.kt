@@ -68,8 +68,10 @@ fun FarmerListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddFarmer) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.farmer_add))
+            if (uiState.canCreate) {
+                FloatingActionButton(onClick = onAddFarmer) {
+                    Icon(Icons.Default.Add, contentDescription = stringResource(R.string.farmer_add))
+                }
             }
         },
     ) { padding ->

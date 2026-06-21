@@ -3,6 +3,8 @@ package com.krishifarms.mobile.feature.worker.presentation.workorder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krishifarms.mobile.core.common.Resource
+import com.krishifarms.mobile.core.security.rbac.ActionPermissions
+import com.krishifarms.mobile.core.security.rbac.PermissionManager
 import com.krishifarms.mobile.feature.worker.domain.model.FarmOption
 import com.krishifarms.mobile.feature.worker.domain.model.WorkOrder
 import com.krishifarms.mobile.feature.worker.domain.model.Worker
@@ -28,6 +30,7 @@ data class WorkOrderListUiState(
     val filterFarmId: String? = null,
     val isRefreshing: Boolean = false,
     val errorMessage: String? = null,
+    val canCreate: Boolean = false,
 )
 
 @HiltViewModel
@@ -35,7 +38,10 @@ class WorkOrderListViewModel @Inject constructor(
     private val workOrderRepository: WorkOrderRepository,
     workerRepository: WorkerRepository,
     farmLookupRepository: FarmLookupRepository,
+    permissionManager: PermissionManager,
 ) : ViewModel() {
+
+    private val canCreate = ActionPermissions.from(permissionManager).workOrder.canCreate
 
     private val filterWorkerId = MutableStateFlow<String?>(null)
     private val filterActivityType = MutableStateFlow<String?>(null)
@@ -77,8 +83,9 @@ class WorkOrderListViewModel @Inject constructor(
             filterFarmId = filters.farmId,
             isRefreshing = filters.refreshing,
             errorMessage = filters.error,
+            canCreate = canCreate,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), WorkOrderListUiState())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), WorkOrderListUiState(canCreate = canCreate))
 
     fun setWorkerFilter(workerId: String?) {
         filterWorkerId.value = workerId

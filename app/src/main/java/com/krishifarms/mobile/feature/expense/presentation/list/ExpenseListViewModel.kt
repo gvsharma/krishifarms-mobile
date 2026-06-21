@@ -3,6 +3,8 @@ package com.krishifarms.mobile.feature.expense.presentation.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krishifarms.mobile.core.common.NetworkMonitor
+import com.krishifarms.mobile.core.security.rbac.ActionPermissions
+import com.krishifarms.mobile.core.security.rbac.PermissionManager
 import com.krishifarms.mobile.feature.expense.domain.model.ExpenseCategory
 import com.krishifarms.mobile.feature.expense.domain.repository.ExpenseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,9 +24,12 @@ import javax.inject.Inject
 class ExpenseListViewModel @Inject constructor(
     private val repository: ExpenseRepository,
     private val networkMonitor: NetworkMonitor,
+    permissionManager: PermissionManager,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ExpenseListUiState())
+    private val _uiState = MutableStateFlow(
+        ExpenseListUiState(canCreate = ActionPermissions.from(permissionManager).expense.canCreate),
+    )
     val uiState: StateFlow<ExpenseListUiState> = _uiState.asStateFlow()
 
     private val searchQuery = MutableStateFlow("")
