@@ -92,8 +92,9 @@ fun ExpenseDetailScreen(
                 }
             }
             else -> {
+                val expense = checkNotNull(uiState.expense)
                 ExpenseDetailContent(
-                    expense = uiState.expense,
+                    expense = expense,
                     currencyFormat = currencyFormat,
                     dateFormat = dateFormat,
                     modifier = Modifier

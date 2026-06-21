@@ -1,18 +1,9 @@
 package com.krishifarms.mobile.core.database
 
 import androidx.room.TypeConverter
-import com.krishifarms.mobile.core.common.SyncStatus
 import com.krishifarms.mobile.core.sync.domain.OperationStatus
 import com.krishifarms.mobile.core.sync.domain.SyncEntityType
 import com.krishifarms.mobile.core.sync.domain.SyncOperationType
-
-class SyncStatusConverter {
-    @TypeConverter
-    fun fromSyncStatus(status: SyncStatus): String = status.name
-
-    @TypeConverter
-    fun toSyncStatus(value: String): SyncStatus = SyncStatus.valueOf(value)
-}
 
 class SyncOperationConverters {
     @TypeConverter

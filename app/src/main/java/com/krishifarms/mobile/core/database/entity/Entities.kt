@@ -56,7 +56,7 @@ data class FarmEntity(
     ],
     indices = [
         androidx.room.Index("farmer_id"),
-        androidx.room.Index("sync_sync_status"),
+        androidx.room.Index("sync_status"),
     ],
 )
 data class ProcurementEntity(
@@ -133,62 +133,12 @@ data class PaymentEntity(
     val sync: SyncMetadata = SyncMetadata(),
 )
 
-@Entity(tableName = "workers")
-data class WorkerEntity(
-    @PrimaryKey
-    val id: String,
-    val name: String,
-    val phone: String? = null,
-    @ColumnInfo(name = "default_hourly_rate")
-    val defaultHourlyRate: Double,
-    val active: Boolean = true,
-    @Embedded
-    val sync: SyncMetadata = SyncMetadata(),
-)
-
-@Entity(tableName = "work_orders")
-data class WorkOrderEntity(
-    @PrimaryKey
-    val id: String,
-    val workerId: String,
-    val workerName: String,
-    val activityType: String,
-    val farmId: String? = null,
-    val farmName: String,
-    val startTime: Long,
-    val endTime: Long,
-    val durationMinutes: Int,
-    val hourlyRate: Double,
-    val cost: Double,
-    @Embedded
-    val sync: SyncMetadata = SyncMetadata(),
-)
-
-enum class AttendanceStatus {
-    PRESENT,
-    ABSENT,
-    HALF_DAY,
-}
-
-@Entity(tableName = "attendance")
-data class AttendanceEntity(
-    @PrimaryKey
-    val id: String,
-    val workerId: String,
-    val date: Long,
-    val checkIn: Long? = null,
-    val checkOut: Long? = null,
-    val status: AttendanceStatus,
-    @Embedded
-    val sync: SyncMetadata = SyncMetadata(),
-)
-
 @Entity(
     tableName = "documents",
     indices = [
         androidx.room.Index("document_type"),
         androidx.room.Index("linked_entity_type", "linked_entity_id"),
-        androidx.room.Index("sync_sync_status"),
+        androidx.room.Index("sync_status"),
     ],
 )
 data class DocumentEntity(

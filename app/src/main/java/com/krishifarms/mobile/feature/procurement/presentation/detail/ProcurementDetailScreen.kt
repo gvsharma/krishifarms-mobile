@@ -85,8 +85,9 @@ fun ProcurementDetailScreen(
                 }
             }
             else -> {
+                val procurement = checkNotNull(uiState.procurement)
                 ProcurementDetailContent(
-                    procurement = uiState.procurement,
+                    procurement = procurement,
                     currencyFormat = currencyFormat,
                     modifier = Modifier
                         .fillMaxSize()

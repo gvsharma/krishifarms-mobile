@@ -36,6 +36,8 @@ fun WorkOrderEntity.toDomain(): WorkOrder = WorkOrder(
     syncStatus = sync.syncStatus,
 )
 
+fun WorkOrderEntity.toWorkOrderDomain(): WorkOrder = toDomain()
+
 fun AttendanceEntity.toDomain(workerName: String = ""): Attendance = Attendance(
     id = id,
     workerId = workerId,
