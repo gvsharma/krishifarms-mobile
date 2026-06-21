@@ -3,6 +3,8 @@ package com.krishifarms.mobile.feature.procurement.presentation.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krishifarms.mobile.core.common.NetworkMonitor
+import com.krishifarms.mobile.core.security.rbac.ActionPermissions
+import com.krishifarms.mobile.core.security.rbac.PermissionManager
 import com.krishifarms.mobile.feature.procurement.domain.repository.ProcurementRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,9 +19,12 @@ import javax.inject.Inject
 class ProcurementListViewModel @Inject constructor(
     private val repository: ProcurementRepository,
     private val networkMonitor: NetworkMonitor,
+    permissionManager: PermissionManager,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ProcurementListUiState())
+    private val _uiState = MutableStateFlow(
+        ProcurementListUiState(canCreate = ActionPermissions.from(permissionManager).procurement.canCreate),
+    )
     val uiState: StateFlow<ProcurementListUiState> = _uiState.asStateFlow()
 
     init {

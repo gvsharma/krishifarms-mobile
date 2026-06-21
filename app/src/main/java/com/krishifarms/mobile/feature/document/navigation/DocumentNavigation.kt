@@ -51,17 +51,24 @@ object DocumentRoutes {
     }
 }
 
-fun NavGraphBuilder.documentRoutes(navController: NavHostController) {
+fun NavGraphBuilder.documentRoutes(
+    navController: NavHostController,
+    permissionManager: com.krishifarms.mobile.core.security.rbac.PermissionManager,
+    onNavigateToDashboard: () -> Unit,
+    guardedNavigate: (String) -> Unit,
+) {
     composable(DocumentRoutes.UPLOAD) {
-        DocumentUploadScreen(
-            onBack = { navController.popBackStack() },
-            onNavigateToCamera = { type, entityType, entityId ->
-                navController.navigate(DocumentRoutes.capture(type, entityType, entityId))
-            },
-            onNavigateToPreview = { documentId ->
-                navController.navigate(DocumentRoutes.preview(documentId))
-            },
-        )
+        com.krishifarms.mobile.core.security.rbac.GuardedRoute(DocumentRoutes.UPLOAD, permissionManager, onNavigateToDashboard) {
+            DocumentUploadScreen(
+                onBack = { navController.popBackStack() },
+                onNavigateToCamera = { type, entityType, entityId ->
+                    guardedNavigate(DocumentRoutes.capture(type, entityType, entityId))
+                },
+                onNavigateToPreview = { documentId ->
+                    guardedNavigate(DocumentRoutes.preview(documentId))
+                },
+            )
+        }
     }
 
     composable(
@@ -83,15 +90,17 @@ fun NavGraphBuilder.documentRoutes(navController: NavHostController) {
             },
         ),
     ) {
-        DocumentUploadScreen(
-            onBack = { navController.popBackStack() },
-            onNavigateToCamera = { type, entityType, entityId ->
-                navController.navigate(DocumentRoutes.capture(type, entityType, entityId))
-            },
-            onNavigateToPreview = { documentId ->
-                navController.navigate(DocumentRoutes.preview(documentId))
-            },
-        )
+        com.krishifarms.mobile.core.security.rbac.GuardedRoute(DocumentRoutes.UPLOAD, permissionManager, onNavigateToDashboard) {
+            DocumentUploadScreen(
+                onBack = { navController.popBackStack() },
+                onNavigateToCamera = { type, entityType, entityId ->
+                    guardedNavigate(DocumentRoutes.capture(type, entityType, entityId))
+                },
+                onNavigateToPreview = { documentId ->
+                    guardedNavigate(DocumentRoutes.preview(documentId))
+                },
+            )
+        }
     }
 
     composable(
@@ -116,14 +125,16 @@ fun NavGraphBuilder.documentRoutes(navController: NavHostController) {
         val typeName = backStackEntry.arguments?.getString(DocumentRoutes.ARG_DOCUMENT_TYPE)
         val documentType = runCatching { DocumentType.valueOf(typeName ?: DocumentType.RECEIPT.name) }
             .getOrDefault(DocumentType.RECEIPT)
-        CameraCaptureScreen(
-            documentType = documentType,
-            onBack = { navController.popBackStack() },
-            onCaptured = { documentId ->
-                navController.popBackStack()
-                navController.navigate(DocumentRoutes.preview(documentId))
-            },
-        )
+        com.krishifarms.mobile.core.security.rbac.GuardedRoute(DocumentRoutes.CAPTURE, permissionManager, onNavigateToDashboard) {
+            CameraCaptureScreen(
+                documentType = documentType,
+                onBack = { navController.popBackStack() },
+                onCaptured = { documentId ->
+                    navController.popBackStack()
+                    guardedNavigate(DocumentRoutes.preview(documentId))
+                },
+            )
+        }
     }
 
     composable(
@@ -132,16 +143,20 @@ fun NavGraphBuilder.documentRoutes(navController: NavHostController) {
             navArgument(DocumentRoutes.ARG_DOCUMENT_ID) { type = NavType.StringType },
         ),
     ) {
-        DocumentPreviewScreen(onBack = { navController.popBackStack() })
+        com.krishifarms.mobile.core.security.rbac.GuardedRoute(DocumentRoutes.PREVIEW, permissionManager, onNavigateToDashboard) {
+            DocumentPreviewScreen(onBack = { navController.popBackStack() })
+        }
     }
 
     composable(DocumentRoutes.LIST) {
-        DocumentListScreen(
-            onBack = { navController.popBackStack() },
-            onUploadClick = { navController.navigate(DocumentRoutes.upload()) },
-            onDocumentClick = { documentId ->
-                navController.navigate(DocumentRoutes.preview(documentId))
-            },
-        )
+        com.krishifarms.mobile.core.security.rbac.GuardedRoute(DocumentRoutes.LIST, permissionManager, onNavigateToDashboard) {
+            DocumentListScreen(
+                onBack = { navController.popBackStack() },
+                onUploadClick = { guardedNavigate(DocumentRoutes.upload()) },
+                onDocumentClick = { documentId ->
+                    guardedNavigate(DocumentRoutes.preview(documentId))
+                },
+            )
+        }
     }
 }

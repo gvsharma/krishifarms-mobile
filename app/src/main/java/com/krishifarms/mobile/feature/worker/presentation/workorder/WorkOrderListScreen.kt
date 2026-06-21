@@ -79,8 +79,10 @@ fun WorkOrderListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddWorkOrder) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.worker_work_order_add))
+            if (uiState.canCreate) {
+                FloatingActionButton(onClick = onAddWorkOrder) {
+                    Icon(Icons.Default.Add, contentDescription = stringResource(R.string.worker_work_order_add))
+                }
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },

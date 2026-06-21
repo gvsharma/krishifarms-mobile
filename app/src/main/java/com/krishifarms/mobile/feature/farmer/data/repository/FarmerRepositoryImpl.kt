@@ -13,6 +13,9 @@ import com.krishifarms.mobile.core.network.FarmerApiService
 import com.krishifarms.mobile.core.network.NetworkResult
 import com.krishifarms.mobile.core.network.dto.FarmerDtos
 import com.krishifarms.mobile.core.network.safeApiCall
+import com.krishifarms.mobile.core.security.rbac.Permission
+import com.krishifarms.mobile.core.security.rbac.PermissionGuard
+import com.krishifarms.mobile.core.security.rbac.PermissionManager
 import com.krishifarms.mobile.feature.farmer.data.mapper.toDomain
 import com.krishifarms.mobile.feature.farmer.data.mapper.toEntity
 import com.krishifarms.mobile.feature.farmer.domain.model.Farmer
@@ -33,6 +36,7 @@ class FarmerRepositoryImpl @Inject constructor(
     private val networkMonitor: NetworkMonitor,
     private val dispatchers: DispatcherProvider,
     private val workManager: WorkManager,
+    private val permissionManager: PermissionManager,
 ) : FarmerRepository {
 
     override fun getFarmers(searchQuery: String): Flow<List<Farmer>> {
@@ -49,6 +53,7 @@ class FarmerRepositoryImpl @Inject constructor(
 
     override suspend fun createFarmer(input: FarmerInput): Resource<Farmer> =
         withContext(dispatchers.io) {
+            PermissionGuard.require(permissionManager, Permission.FARMER_CREATE)
             val localId = IdGenerator.newLocalId()
             val farmer = Farmer(
                 id = localId,
@@ -72,6 +77,7 @@ class FarmerRepositoryImpl @Inject constructor(
 
     override suspend fun updateFarmer(id: String, input: FarmerInput): Resource<Farmer> =
         withContext(dispatchers.io) {
+            PermissionGuard.require(permissionManager, Permission.FARMER_UPDATE)
             val existing = farmerDao.getById(id)
                 ?: return@withContext Resource.Error("Farmer not found")
 

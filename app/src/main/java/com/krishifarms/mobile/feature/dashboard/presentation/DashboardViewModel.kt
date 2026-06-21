@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krishifarms.mobile.core.common.Resource
 import com.krishifarms.mobile.R
+import com.krishifarms.mobile.core.security.rbac.DashboardCardAccess
+import com.krishifarms.mobile.core.security.session.SessionManager
 import com.krishifarms.mobile.feature.dashboard.domain.model.DashboardMetric
 import com.krishifarms.mobile.feature.dashboard.domain.model.DashboardSummary
 import com.krishifarms.mobile.feature.dashboard.domain.repository.DashboardRepository
@@ -68,6 +70,7 @@ sealed interface DashboardUiState {
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val dashboardRepository: DashboardRepository,
+    private val sessionManager: SessionManager,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<DashboardUiState>(DashboardUiState.Loading)
@@ -149,6 +152,7 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun DashboardSummary.toCards(): List<DashboardCardUiModel> {
+        val visible = DashboardCardAccess.visibleCards(sessionManager.session.value)
         return listOf(
             DashboardCardUiModel(DashboardCardType.TODAYS_PROCUREMENT, todaysProcurement),
             DashboardCardUiModel(DashboardCardType.TODAYS_EXPENSES, todaysExpenses),
@@ -157,7 +161,7 @@ class DashboardViewModel @Inject constructor(
             DashboardCardUiModel(DashboardCardType.PENDING_COLLECTIONS, pendingCollections),
             DashboardCardUiModel(DashboardCardType.WORKER_ATTENDANCE, workerAttendance),
             DashboardCardUiModel(DashboardCardType.ACTIVE_RENTALS, activeRentals),
-        )
+        ).filter { it.type in visible }
     }
 
     private fun DashboardSummary.isEmptySummary(): Boolean {

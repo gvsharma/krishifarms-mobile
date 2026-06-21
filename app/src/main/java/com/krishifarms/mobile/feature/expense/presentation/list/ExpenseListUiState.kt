@@ -15,4 +15,5 @@ data class ExpenseListUiState(
     val isOffline: Boolean = false,
     val pendingSyncCount: Int = 0,
     val errorMessage: String? = null,
+    val canCreate: Boolean = false,
 )

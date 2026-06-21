@@ -62,11 +62,15 @@ fun WorkerListScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.workers_title)) },
                 actions = {
-                    IconButton(onClick = onNavigateToAttendance) {
-                        Text(stringResource(R.string.worker_attendance_short), style = MaterialTheme.typography.labelMedium)
+                    if (uiState.canViewAttendance) {
+                        IconButton(onClick = onNavigateToAttendance) {
+                            Text(stringResource(R.string.worker_attendance_short), style = MaterialTheme.typography.labelMedium)
+                        }
                     }
-                    IconButton(onClick = onNavigateToWorkOrders) {
-                        Text(stringResource(R.string.worker_work_orders_short), style = MaterialTheme.typography.labelMedium)
+                    if (uiState.canViewWorkOrders) {
+                        IconButton(onClick = onNavigateToWorkOrders) {
+                            Text(stringResource(R.string.worker_work_orders_short), style = MaterialTheme.typography.labelMedium)
+                        }
                     }
                     IconButton(onClick = { /* search handled inline */ }) {
                         Icon(Icons.Default.Search, contentDescription = stringResource(R.string.common_search))
@@ -75,8 +79,10 @@ fun WorkerListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddWorker) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.worker_add))
+            if (uiState.canCreate) {
+                FloatingActionButton(onClick = onAddWorker) {
+                    Icon(Icons.Default.Add, contentDescription = stringResource(R.string.worker_add))
+                }
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
