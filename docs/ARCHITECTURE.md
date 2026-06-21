@@ -1,10 +1,12 @@
 # KrishiFarms CRM — Android Architecture Document
 
 **Version:** 1.0  
-**Status:** Initial Design  
+**Status:** Initial Design (layer reference)  
 **Audience:** Engineering, Product, Security Review  
 **Author:** Principal Android Architecture  
 **Last Updated:** June 2025
+
+> **Product & rollout spec:** For the expanded CRM target — multi-module Gradle layout, bottom navigation, design system, user roles, wireframes, phased implementation, and migration from today's single `:app` drawer shell — see **[PRODUCT_ARCHITECTURE.md](PRODUCT_ARCHITECTURE.md)**. This document remains the canonical reference for **layer boundaries**, Room schema detail, security, sync protocol, and repository patterns. The **target multi-module split** (`:app`, `:core:*`, `:domain`, `:data`, `:feature:*`) is specified in [PRODUCT_ARCHITECTURE.md §2](PRODUCT_ARCHITECTURE.md#2-complete-project-structure); execution is planned for Phase 4 of the product rollout while code continues in `:app` until then.
 
 ---
 
@@ -131,6 +133,10 @@ flowchart TB
 - **Media Pipeline**: CameraX capture → local staging → background upload
 
 ### 2.3 Module Strategy (Gradle)
+
+**Current (`initial-commit`):** Single `:app` module with feature packages under `com.krishifarms.mobile.feature.*`. Multi-module includes are commented in `settings.gradle.kts`.
+
+**Target:** Monorepo multi-module per [PRODUCT_ARCHITECTURE.md §2](PRODUCT_ARCHITECTURE.md#2-complete-project-structure). Split execution is Phase 4; until then, preserve package boundaries inside `:app` to ease extraction.
 
 For initial scale (3–10 users), a **monorepo multi-module** approach balances velocity and boundaries. Split further when team size or build times demand it.
 

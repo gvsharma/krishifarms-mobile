@@ -33,7 +33,7 @@ KrishiFarms Mobile is an **internal deployment** Android app (not Play Store). I
 - Capture and upload **documents** (Aadhaar, land records, receipts)
 - **Offline-first**: all writes go to Room immediately; background sync pushes to server
 
-Designed for 3–10 users initially, scaling to 100+ without architectural rework. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full target design.
+Designed for 3–10 users initially, scaling to 100+ without architectural rework. See [docs/PRODUCT_ARCHITECTURE.md](docs/PRODUCT_ARCHITECTURE.md) for the product spec (design system, bottom nav, roles, phased rollout) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for layer-level technical design.
 
 ---
 
@@ -97,7 +97,10 @@ krishifarms-mobile/
 │           └── values-te/strings.xml
 ├── docs/
 │   ├── AGENTS.md                 # Primary AI agent onboarding guide
-│   ├── ARCHITECTURE.md           # Full architecture design doc
+│   ├── DESIGN_SYSTEM.md          # Colors, typography, shapes, KfCard, font attribution
+│   ├── PRODUCT_ARCHITECTURE.md   # Product spec: design system, nav, phases, migration
+│   ├── RBAC_IMPLEMENTATION_PLAN.md  # Permission-driven UI rollout plan
+│   ├── ARCHITECTURE.md           # Layer architecture reference
 │   └── SYNC_ENGINE.md            # Offline sync engine reference
 ├── .cursor/rules/
 │   └── documentation-maintenance.mdc
@@ -138,25 +141,25 @@ Each feature follows: `data/` → `domain/` → `presentation/` → `di/` → `n
 
 ## 6. Implemented Modules
 
-Status reflects **code completeness** and **navigation wiring** in `MainNavGraph`.
+Status reflects **code completeness** and **navigation wiring** in `MainNavGraph`. **Target phase** maps to [docs/PRODUCT_ARCHITECTURE.md](docs/PRODUCT_ARCHITECTURE.md) rollout plan.
 
-| Module | Code | Nav wired | Notes |
-|--------|------|-----------|-------|
-| **Auth** | ✅ | ✅ | Mobile-number login, JWT, encrypted tokens, session gate |
-| **Dashboard** | ✅ | ✅ | KPI cards navigate to feature routes |
-| **Farmer** | ✅ | ✅ | Full CRUD + `FarmerSyncHandler`; reference implementation |
-| **Procurement** | ✅ | ✅ | List, detail, create form + `ProcurementSyncHandler` (create-focused) |
-| **Worker** | ✅ | ✅ | Workers, work orders, attendance + `WorkerSyncHandler` |
-| **Expense** | ✅ | ✅ | List, detail, form + `ExpenseSyncHandler`; dashboard KPI navigates to list |
-| **Document** | ✅ | ✅ | List, CameraX capture, upload, preview; `DocumentSyncHandler` + `DocumentUploadWorker` |
-| **Sync engine** | ✅ | — | Implemented — queue, handlers, WorkManager; see [docs/SYNC_ENGINE.md](docs/SYNC_ENGINE.md) |
-| **Farms** | ❌ | stub | `FeatureStubScreen` only |
-| **Farmer payments** | ❌ | stub | Placeholder |
-| **Collections / Payments** | ❌ | stub | Placeholder |
-| **Vehicles / Trips** | ❌ | stub | Placeholder |
-| **Assets / Rentals** | ❌ | stub | Placeholder |
-| **Settings** | ❌ | stub | Logout hook present on stub |
-| **Sync status UI** | 🔶 | stub | `SyncStatusIndicator` + `SyncDebugScreen` exist; `Routes.SYNC` still uses stub |
+| Module | Code | Nav wired | Target phase | Notes |
+|--------|:----:|:---------:|:------------:|-------|
+| **Auth** | ✅ | ✅ | 1 | JWT + `EncryptedSharedPreferences`; migrate to Proto DataStore + biometric |
+| **Dashboard** | ✅ | ✅ | 1 | Refactor for bottom-nav Home tab |
+| **Farmer** | ✅ | ✅ | 1–2 | Reference implementation; tabbed detail in Phase 2 |
+| **Procurement** | ✅ | ✅ | 1 | List, detail, create + `ProcurementSyncHandler` |
+| **Worker** | ✅ | ✅ | 1 | Workers, work orders, attendance |
+| **Expense** | ✅ | ✅ | 2–3 | Approval flow Phase 3 |
+| **Document** | ✅ | ✅ | 1 | CameraX capture, upload, preview |
+| **Sync engine** | ✅ | — | 1–3 | See [docs/SYNC_ENGINE.md](docs/SYNC_ENGINE.md) |
+| **Design system / Bottom nav** | 🔶 | ✅ | 1 | 5-tab `MainBottomNav` + dynamic RBAC drawer; full hub grids still stub |
+| **Farms** | 🔶 | stub | 1 | Room entity exists; UI stub |
+| **Collections** | ❌ | stub | 2 | Fast-entry — P0 Phase 2 |
+| **Farmer payments / Payments** | ❌ / 🔶 | stub | 2–3 | Payments entity exists |
+| **Vehicles / Trips / Assets / Rentals** | ❌ | stub | 4 | Fleet hub |
+| **Settings / Sync UI** | ❌ / 🔶 | stub | 1 | Wire `SyncDebugScreen` |
+| **Global search / Biometric / FCM** | ❌ | — | 2–4 | See product architecture doc |
 
 Legend: ✅ complete · 🔶 partial · ❌ not started / stub only
 
@@ -216,7 +219,9 @@ MainActivity
 
 **Session gate** (`KrishiFarmsNavHost`): observes `AuthViewModel.sessionState` and redirects among loading, login, and main graph.
 
-**Main shell** (`MainNavGraph`): `ModalNavigationDrawer` + `Scaffold` + inner `NavHost`. Drawer lists all modules from `MainFeatureDestinations`.
+**Main shell** (`MainNavGraph`): dynamic RBAC-filtered drawer + `MainBottomNav` (5 tabs) + guarded `NavHost`. Menu visibility from `accessibleModules`; route/action gates from `permissions`.
+
+**RBAC:** Login/refresh responses include `roles`, `permissions`, `accessibleModules`. Debug builds use `RBAC_STRICT_MODE=false` (legacy: empty permissions → all modules). Release enforces strict mode.
 
 ### Registering a new feature route
 
@@ -327,7 +332,10 @@ Quick pointers:
 | Document | Purpose |
 |----------|---------|
 | **[docs/AGENTS.md](docs/AGENTS.md)** | **Primary AI agent guide** — start here every session |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Target architecture: layers, navigation, Room schema, security, rollout phases |
+| **[docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)** | **Design tokens** — Canopia-inspired colors, typography, shapes, components |
+| **[docs/PRODUCT_ARCHITECTURE.md](docs/PRODUCT_ARCHITECTURE.md)** | **Product spec** — multi-module layout, design system, bottom nav, wireframes, roles, phased rollout, migration |
+| **[docs/RBAC_IMPLEMENTATION_PLAN.md](docs/RBAC_IMPLEMENTATION_PLAN.md)** | **RBAC rollout** — permission-driven UI, session model, navigation guards, phased migration |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Layer architecture: Clean Architecture, Room schema, security, sync protocol |
 | [docs/SYNC_ENGINE.md](docs/SYNC_ENGINE.md) | Sync queue, handlers, WorkManager, conflict resolution |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines and doc-update expectations for humans |
 | [.cursor/rules/documentation-maintenance.mdc](.cursor/rules/documentation-maintenance.mdc) | Cursor rule enforcing doc updates with code changes |
