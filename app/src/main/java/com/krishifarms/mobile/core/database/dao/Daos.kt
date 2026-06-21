@@ -75,16 +75,16 @@ interface FarmerDao {
 
 @Dao
 interface FarmDao {
-    @Query("SELECT * FROM farms WHERE sync_is_deleted = 0 ORDER BY name ASC")
+    @Query("SELECT * FROM farms WHERE is_deleted = 0 ORDER BY name ASC")
     fun observeAll(): Flow<List<FarmEntity>>
 
-    @Query("SELECT * FROM farms WHERE farmerId = :farmerId AND sync_is_deleted = 0")
+    @Query("SELECT * FROM farms WHERE farmerId = :farmerId AND is_deleted = 0")
     fun observeByFarmer(farmerId: String): Flow<List<FarmEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(farms: List<FarmEntity>)
 
-    @Query("SELECT * FROM farms WHERE sync_sync_status != 'SYNCED' AND sync_is_deleted = 0")
+    @Query("SELECT * FROM farms WHERE sync_status != 'SYNCED' AND is_deleted = 0")
     suspend fun getPendingSync(): List<FarmEntity>
 }
 
@@ -95,16 +95,16 @@ interface ProcurementDao {
         SELECT p.*, f.name AS farmer_name, f.village AS farmer_village
         FROM procurements p
         INNER JOIN farmers f ON p.farmer_id = f.id
-        WHERE p.sync_is_deleted = 0
+        WHERE p.is_deleted = 0
         ORDER BY p.created_at DESC
         """,
     )
     fun observeAllWithFarmer(): Flow<List<ProcurementWithFarmer>>
 
-    @Query("SELECT * FROM procurements WHERE id = :id AND sync_is_deleted = 0 LIMIT 1")
+    @Query("SELECT * FROM procurements WHERE id = :id AND is_deleted = 0 LIMIT 1")
     fun observeById(id: String): Flow<ProcurementEntity?>
 
-    @Query("SELECT * FROM procurements WHERE id = :id AND sync_is_deleted = 0 LIMIT 1")
+    @Query("SELECT * FROM procurements WHERE id = :id AND is_deleted = 0 LIMIT 1")
     suspend fun getById(id: String): ProcurementEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -116,44 +116,44 @@ interface ProcurementDao {
     @Update
     suspend fun update(procurement: ProcurementEntity)
 
-    @Query("SELECT * FROM procurements WHERE sync_sync_status != 'SYNCED' AND sync_is_deleted = 0")
+    @Query("SELECT * FROM procurements WHERE sync_status != 'SYNCED' AND is_deleted = 0")
     suspend fun getPendingSync(): List<ProcurementEntity>
 
-    @Query("SELECT COUNT(*) FROM procurements WHERE sync_sync_status != 'SYNCED' AND sync_is_deleted = 0")
+    @Query("SELECT COUNT(*) FROM procurements WHERE sync_status != 'SYNCED' AND is_deleted = 0")
     fun observePendingCount(): Flow<Int>
 }
 
 @Dao
 interface PaymentDao {
-    @Query("SELECT * FROM payments WHERE sync_is_deleted = 0 ORDER BY paidAt DESC")
+    @Query("SELECT * FROM payments WHERE is_deleted = 0 ORDER BY paidAt DESC")
     fun observeAll(): Flow<List<PaymentEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(payments: List<PaymentEntity>)
 
-    @Query("SELECT * FROM payments WHERE sync_sync_status != 'SYNCED' AND sync_is_deleted = 0")
+    @Query("SELECT * FROM payments WHERE sync_status != 'SYNCED' AND is_deleted = 0")
     suspend fun getPendingSync(): List<PaymentEntity>
 }
 
 @Dao
 interface WorkerDao {
-    @Query("SELECT * FROM workers WHERE sync_is_deleted = 0 ORDER BY name ASC")
+    @Query("SELECT * FROM workers WHERE is_deleted = 0 ORDER BY name ASC")
     fun observeAll(): Flow<List<WorkerEntity>>
 
     @Query(
         """
         SELECT * FROM workers
-        WHERE sync_is_deleted = 0
+        WHERE is_deleted = 0
         AND (name LIKE '%' || :query || '%' OR phone LIKE '%' || :query || '%')
         ORDER BY name ASC
         """,
     )
     fun search(query: String): Flow<List<WorkerEntity>>
 
-    @Query("SELECT * FROM workers WHERE id = :id AND sync_is_deleted = 0 LIMIT 1")
+    @Query("SELECT * FROM workers WHERE id = :id AND is_deleted = 0 LIMIT 1")
     suspend fun getById(id: String): WorkerEntity?
 
-    @Query("SELECT * FROM workers WHERE id = :id AND sync_is_deleted = 0 LIMIT 1")
+    @Query("SELECT * FROM workers WHERE id = :id AND is_deleted = 0 LIMIT 1")
     fun observeById(id: String): Flow<WorkerEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -165,28 +165,44 @@ interface WorkerDao {
     @Update
     suspend fun update(worker: WorkerEntity)
 
-    @Query("SELECT * FROM workers WHERE sync_sync_status != 'SYNCED' AND sync_is_deleted = 0")
+    @Query("SELECT * FROM workers WHERE sync_status != 'SYNCED' AND is_deleted = 0")
     suspend fun getPendingSync(): List<WorkerEntity>
 
     @Query(
-        "UPDATE workers SET sync_is_deleted = 1, sync_sync_status = :status, " +
-            "sync_local_updated_at = :updatedAt WHERE id = :id",
+        "UPDATE workers SET is_deleted = 1, sync_status = :status, " +
+            "local_updated_at = :updatedAt WHERE id = :id",
     )
     suspend fun softDelete(id: String, status: SyncStatus, updatedAt: Long = System.currentTimeMillis())
 }
 
 @Dao
 interface WorkOrderDao {
-    @Query("SELECT * FROM work_orders WHERE sync_is_deleted = 0 ORDER BY startTime DESC")
+    @Query("SELECT * FROM work_orders WHERE is_deleted = 0 ORDER BY start_time DESC")
     fun observeAll(): Flow<List<WorkOrderEntity>>
 
-    @Query("SELECT * FROM work_orders WHERE workerId = :workerId AND sync_is_deleted = 0 ORDER BY startTime DESC")
+    @Query("SELECT * FROM work_orders WHERE worker_id = :workerId AND is_deleted = 0 ORDER BY start_time DESC")
     fun observeByWorker(workerId: String): Flow<List<WorkOrderEntity>>
 
-    @Query("SELECT * FROM work_orders WHERE id = :id AND sync_is_deleted = 0 LIMIT 1")
+    @Query(
+        """
+        SELECT * FROM work_orders
+        WHERE is_deleted = 0
+        AND (:workerId IS NULL OR worker_id = :workerId)
+        AND (:activityType IS NULL OR activity_type = :activityType)
+        AND (:farmId IS NULL OR farm_id = :farmId)
+        ORDER BY start_time DESC
+        """,
+    )
+    fun observeFiltered(
+        workerId: String?,
+        activityType: String?,
+        farmId: String?,
+    ): Flow<List<WorkOrderEntity>>
+
+    @Query("SELECT * FROM work_orders WHERE id = :id AND is_deleted = 0 LIMIT 1")
     suspend fun getById(id: String): WorkOrderEntity?
 
-    @Query("SELECT * FROM work_orders WHERE id = :id AND sync_is_deleted = 0 LIMIT 1")
+    @Query("SELECT * FROM work_orders WHERE id = :id AND is_deleted = 0 LIMIT 1")
     fun observeById(id: String): Flow<WorkOrderEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -198,30 +214,30 @@ interface WorkOrderDao {
     @Update
     suspend fun update(workOrder: WorkOrderEntity)
 
-    @Query("SELECT * FROM work_orders WHERE sync_sync_status != 'SYNCED' AND sync_is_deleted = 0")
+    @Query("SELECT * FROM work_orders WHERE sync_status != 'SYNCED' AND is_deleted = 0")
     suspend fun getPendingSync(): List<WorkOrderEntity>
 
     @Query(
-        "UPDATE work_orders SET sync_is_deleted = 1, sync_sync_status = :status, " +
-            "sync_local_updated_at = :updatedAt WHERE id = :id",
+        "UPDATE work_orders SET is_deleted = 1, sync_status = :status, " +
+            "local_updated_at = :updatedAt WHERE id = :id",
     )
     suspend fun softDelete(id: String, status: SyncStatus, updatedAt: Long = System.currentTimeMillis())
 }
 
 @Dao
 interface AttendanceDao {
-    @Query("SELECT * FROM attendance WHERE sync_is_deleted = 0 ORDER BY date DESC")
+    @Query("SELECT * FROM attendance WHERE is_deleted = 0 ORDER BY date DESC")
     fun observeAll(): Flow<List<AttendanceEntity>>
 
-    @Query("SELECT * FROM attendance WHERE workerId = :workerId AND sync_is_deleted = 0 ORDER BY date DESC")
+    @Query("SELECT * FROM attendance WHERE worker_id = :workerId AND is_deleted = 0 ORDER BY date DESC")
     fun observeByWorker(workerId: String): Flow<List<AttendanceEntity>>
 
-    @Query("SELECT * FROM attendance WHERE date = :date AND sync_is_deleted = 0 ORDER BY workerId ASC")
+    @Query("SELECT * FROM attendance WHERE date = :date AND is_deleted = 0 ORDER BY worker_id ASC")
     fun observeByDate(date: Long): Flow<List<AttendanceEntity>>
 
     @Query(
-        "SELECT * FROM attendance WHERE workerId = :workerId AND date = :date " +
-            "AND sync_is_deleted = 0 LIMIT 1",
+        "SELECT * FROM attendance WHERE worker_id = :workerId AND date = :date " +
+            "AND is_deleted = 0 LIMIT 1",
     )
     suspend fun getByWorkerAndDate(workerId: String, date: Long): AttendanceEntity?
 
@@ -234,7 +250,7 @@ interface AttendanceDao {
     @Update
     suspend fun update(attendance: AttendanceEntity)
 
-    @Query("SELECT * FROM attendance WHERE sync_sync_status != 'SYNCED' AND sync_is_deleted = 0")
+    @Query("SELECT * FROM attendance WHERE sync_status != 'SYNCED' AND is_deleted = 0")
     suspend fun getPendingSync(): List<AttendanceEntity>
 }
 
@@ -301,17 +317,17 @@ interface DocumentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(document: com.krishifarms.mobile.core.database.entity.DocumentEntity)
 
-    @Query("SELECT * FROM documents WHERE id = :id AND sync_is_deleted = 0 LIMIT 1")
+    @Query("SELECT * FROM documents WHERE id = :id AND is_deleted = 0 LIMIT 1")
     suspend fun getById(id: String): com.krishifarms.mobile.core.database.entity.DocumentEntity?
 
-    @Query("SELECT * FROM documents WHERE id = :id AND sync_is_deleted = 0 LIMIT 1")
+    @Query("SELECT * FROM documents WHERE id = :id AND is_deleted = 0 LIMIT 1")
     fun observeById(id: String): Flow<com.krishifarms.mobile.core.database.entity.DocumentEntity?>
 
     @Query(
         """
         SELECT * FROM documents
         WHERE document_type = :type
-        AND sync_is_deleted = 0
+        AND is_deleted = 0
         ORDER BY created_at DESC
         """,
     )
@@ -324,7 +340,7 @@ interface DocumentDao {
         SELECT * FROM documents
         WHERE (:entityType IS NULL OR linked_entity_type = :entityType)
         AND (:entityId IS NULL OR linked_entity_id = :entityId)
-        AND sync_is_deleted = 0
+        AND is_deleted = 0
         ORDER BY created_at DESC
         """,
     )
@@ -336,8 +352,8 @@ interface DocumentDao {
     @Query(
         """
         SELECT * FROM documents
-        WHERE sync_sync_status != 'SYNCED'
-        AND sync_is_deleted = 0
+        WHERE sync_status != 'SYNCED'
+        AND is_deleted = 0
         ORDER BY created_at ASC
         """,
     )
@@ -346,12 +362,12 @@ interface DocumentDao {
     @Query(
         """
         UPDATE documents SET
-        sync_sync_status = :status,
-        sync_last_synced_at = :syncedAt,
-        sync_local_updated_at = :updatedAt,
+        sync_status = :status,
+        last_synced_at = :syncedAt,
+        local_updated_at = :updatedAt,
         remote_url = COALESCE(:remoteUrl, remote_url),
         uploaded_at = COALESCE(:uploadedAt, uploaded_at),
-        sync_sync_error = :error
+        sync_error = :error
         WHERE id = :id
         """,
     )

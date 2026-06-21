@@ -47,27 +47,36 @@ class WorkOrderListViewModel @Inject constructor(
         Triple(w, a, f)
     }
 
-    val uiState: StateFlow<WorkOrderListUiState> = combine(
+    private val listData = combine(
         filters.flatMapLatest { (workerId, activityType, farmId) ->
             workOrderRepository.observeWorkOrders(workerId, activityType, farmId)
         },
         workerRepository.observeWorkers(),
         farmLookupRepository.observeFarms(),
+    ) { workOrders, workers, farms ->
+        Triple(workOrders, workers, farms)
+    }
+
+    private val filterState = combine(
         filterWorkerId,
         filterActivityType,
         filterFarmId,
         isRefreshing,
         errorMessage,
-    ) { workOrders, workers, farms, workerId, activityType, farmId, refreshing, error ->
+    ) { workerId, activityType, farmId, refreshing, error ->
+        FilterUiState(workerId, activityType, farmId, refreshing, error)
+    }
+
+    val uiState: StateFlow<WorkOrderListUiState> = combine(listData, filterState) { data, filters ->
         WorkOrderListUiState(
-            workOrders = workOrders,
-            workers = workers,
-            farms = farms,
-            filterWorkerId = workerId,
-            filterActivityType = activityType,
-            filterFarmId = farmId,
-            isRefreshing = refreshing,
-            errorMessage = error,
+            workOrders = data.first,
+            workers = data.second,
+            farms = data.third,
+            filterWorkerId = filters.workerId,
+            filterActivityType = filters.activityType,
+            filterFarmId = filters.farmId,
+            isRefreshing = filters.refreshing,
+            errorMessage = filters.error,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), WorkOrderListUiState())
 
@@ -94,3 +103,11 @@ class WorkOrderListViewModel @Inject constructor(
         }
     }
 }
+
+private data class FilterUiState(
+    val workerId: String?,
+    val activityType: String?,
+    val farmId: String?,
+    val refreshing: Boolean,
+    val error: String?,
+)

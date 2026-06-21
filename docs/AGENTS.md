@@ -27,7 +27,7 @@
 | Navigation | Navigation Compose (drawer shell) |
 | i18n | `values/strings.xml` + `values-te/strings.xml` |
 
-**Gradle:** single `:app` module today. Multi-module split is planned (see commented blocks in `settings.gradle.kts`).
+**Gradle:** single `:app` module today. **Target** multi-module split and bottom-nav shell are specified in [PRODUCT_ARCHITECTURE.md](PRODUCT_ARCHITECTURE.md) (execution Phase 4; see commented blocks in `settings.gradle.kts`).
 
 **API bases:** debug → `https://api-staging.krishifarms.com/api/v1/` · release → `https://api.krishifarms.com/api/v1/`
 
@@ -43,13 +43,15 @@ Read these files **in order** before implementing or refactoring:
 |---|---------|------|
 | 1 | Agent guide (this file) | `docs/AGENTS.md` |
 | 2 | Project overview & build | `README.md` |
-| 3 | Target architecture design | `docs/ARCHITECTURE.md` |
-| 4 | Sync engine reference | `docs/SYNC_ENGINE.md` |
-| 5 | Navigation & stubs | `core/navigation/MainNavGraph.kt`, `Routes.kt` |
-| 6 | Database schema | `core/database/KrishiFarmsDatabase.kt`, `entity/Entities.kt`, `dao/Daos.kt` |
-| 7 | Sync registration | `core/sync/SyncEngine.kt`, `core/sync/di/SyncModule.kt`, `core/sync/handler/` |
-| 8 | Reference feature (copy patterns) | `feature/farmer/` or `feature/procurement/` |
-| 9 | Strings (both locales) | `app/src/main/res/values/strings.xml`, `values-te/strings.xml` |
+| 3 | **Product architecture (target state)** | `docs/PRODUCT_ARCHITECTURE.md` |
+| 4 | Layer architecture reference | `docs/ARCHITECTURE.md` |
+| 5 | Sync engine reference | `docs/SYNC_ENGINE.md` |
+| 6 | Design system (colors, type, components) | `docs/DESIGN_SYSTEM.md`, `core/ui/theme/` |
+| 7 | Navigation & stubs | `core/navigation/MainNavGraph.kt`, `Routes.kt` |
+| 8 | Database schema | `core/database/KrishiFarmsDatabase.kt`, `entity/Entities.kt`, `dao/Daos.kt` |
+| 9 | Sync registration | `core/sync/SyncEngine.kt`, `core/sync/di/SyncModule.kt`, `core/sync/handler/` |
+| 10 | Reference feature (copy patterns) | `feature/farmer/` or `feature/procurement/` |
+| 11 | Strings (both locales) | `app/src/main/res/values/strings.xml`, `values-te/strings.xml` |
 
 Then grep for the feature route in `MainNavGraph.kt` to see if it is wired or still a `FeatureStubScreen`.
 
@@ -63,9 +65,9 @@ Then grep for the feature route in `MainNavGraph.kt` to see if it is wired or st
 |------|-------------|
 | `app/` | Android application module — all Kotlin source, resources, Room schemas |
 | `app/src/main/java/com/krishifarms/mobile/` | Root package (`KrishiFarmsApplication`, `MainActivity`) |
-| `app/src/main/res/` | Compose themes, bilingual strings, drawables, `file_paths.xml` |
+| `app/src/main/res/` | Compose themes, custom fonts (`font/`), bilingual strings, drawables, `file_paths.xml` |
 | `app/schemas/` | Exported Room database JSON schemas (CI / migration reference) |
-| `docs/` | Architecture, sync, and agent documentation |
+| `docs/` | Product architecture, layer design, sync, and agent documentation |
 | `gradle/` | Version catalog (`libs.versions.toml`) and Gradle wrapper |
 | `.cursor/rules/` | Cursor agent rules (incl. documentation maintenance) |
 | `build.gradle.kts` | Root Gradle plugins |
@@ -83,7 +85,7 @@ Then grep for the feature route in `MainNavGraph.kt` to see if it is wired or st
 | `core/domain` | Shared domain models and repository interfaces |
 | `core/navigation` | `KrishiFarmsNavHost`, `MainNavGraph`, `Routes`, stub screens |
 | `core/sync` | **Sync engine** — `SyncEngine`, handlers, workers, conflict resolver, DI |
-| `core/ui` | Theme, `SyncStatusIcon`, `SyncStatusIndicator`, `SyncDebugScreen`, placeholders |
+| `core/ui` | Canopia-inspired M3 theme (`theme/`), `KfCard`, `SyncStatusIcon`, `SyncStatusIndicator`, `SyncDebugScreen`, placeholders |
 | `core/util` | `ImageCompressor`, `DocumentFileManager`, `CameraXCapture`, attachment storage |
 
 ### `feature/` packages
@@ -104,28 +106,32 @@ Each feature follows: `data/` → `domain/` → `presentation/` → `di/` → `n
 
 ## Module implementation status
 
-Status reflects **code completeness** and **navigation wiring** in `MainNavGraph.kt` (verified against `initial-commit` branch).
+Status reflects **code completeness** and **navigation wiring** in `MainNavGraph.kt` (verified against `initial-commit` branch). **Target phase** column maps to the phased rollout in [PRODUCT_ARCHITECTURE.md §11](PRODUCT_ARCHITECTURE.md#11-screen-by-screen-implementation-plan).
 
-| Module | Code | Nav wired | Notes |
-|--------|:----:|:---------:|-------|
-| **Auth** | ✅ | ✅ | Mobile login, JWT, encrypted tokens, session gate |
-| **Dashboard** | ✅ | ✅ | KPI cards navigate to feature routes |
-| **Farmer** | ✅ | ✅ | Full CRUD + `FarmerSyncHandler` — **copy this for new entities** |
-| **Procurement** | ✅ | ✅ | List, detail, create; sync is create-focused |
-| **Worker** | ✅ | ✅ | Workers, work orders, attendance + `WorkerSyncHandler` |
-| **Expense** | ✅ | ✅ | List, detail, form + `ExpenseSyncHandler` |
-| **Document** | ✅ | ✅ | List, CameraX capture, upload, preview; drawer → `Routes.DOCUMENTS` |
-| **Sync engine** | ✅ | — | Queue, handlers, WorkManager — see [SYNC_ENGINE.md](SYNC_ENGINE.md) |
-| **Farms** | ❌ | stub | `FeatureStubScreen` only |
-| **Farmer payments** | ❌ | stub | Placeholder |
-| **Collections** | ❌ | stub | Placeholder |
-| **Payments** | ❌ | stub | Placeholder |
-| **Vehicles** | ❌ | stub | Placeholder |
-| **Vehicle trips** | ❌ | stub | Placeholder |
-| **Assets** | ❌ | stub | Placeholder |
-| **Rentals** | ❌ | stub | Placeholder |
-| **Settings** | ❌ | stub | Logout hook on stub screen |
-| **Sync status UI** | 🔶 | stub | `SyncStatusIndicator` + `SyncDebugScreen` exist; `Routes.SYNC` still uses stub |
+| Module | Code | Nav wired | Target phase | Notes |
+|--------|:----:|:---------:|:------------:|-------|
+| **Auth** | ✅ | ✅ | 1 | Mobile login, JWT, `EncryptedSharedPreferences` tokens → migrate to Proto DataStore + biometric (Phase 1–2) |
+| **Dashboard** | ✅ | ✅ | 1 | KPI cards; refactor for bottom-nav Home tab |
+| **Farmer** | ✅ | ✅ | 1–2 | Full CRUD + `FarmerSyncHandler` — **copy this for new entities**; tabbed detail in Phase 2 |
+| **Procurement** | ✅ | ✅ | 1 | List, detail, create; sync is create-focused |
+| **Worker** | ✅ | ✅ | 1 | Workers, work orders, attendance + `WorkerSyncHandler` → `:feature:workforce` |
+| **Expense** | ✅ | ✅ | 2–3 | List, detail, form + `ExpenseSyncHandler`; approval flow Phase 3 |
+| **Document** | ✅ | ✅ | 1 | List, CameraX capture, upload, preview |
+| **Sync engine** | ✅ | — | 1–3 | Queue, handlers, WorkManager — see [SYNC_ENGINE.md](SYNC_ENGINE.md); pull sync Phase 3 |
+| **Design system** | 🔶 | — | 1 | Canopia-inspired theme + `KfCard`; see [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md); full `Kf*` catalog in [PRODUCT_ARCHITECTURE.md §4](PRODUCT_ARCHITECTURE.md#4-design-system) |
+| **Bottom navigation** | ❌ | — | 1 | Drawer shell today; target 5-tab nav |
+| **Global search** | ❌ | — | 2 | Per-list filter only today |
+| **Farms** | 🔶 | stub | 1 | Room entity exists; UI is `FeatureStubScreen` |
+| **Collections** | ❌ | stub | 2 | Fast-entry flow — P0 for Phase 2 |
+| **Farmer payments** | ❌ | stub | 2 | |
+| **Payments** | 🔶 | stub | 3 | Room entity exists; UI stub |
+| **Vehicles / Trips** | ❌ | stub | 4 | Combined fleet hub |
+| **Assets / Rentals** | ❌ | stub | 4 | |
+| **Settings** | ❌ | stub | 1 | Profile, language, sync status, biometric toggle |
+| **Sync status UI** | 🔶 | stub | 1 | `SyncStatusIndicator` + `SyncDebugScreen` exist; wire `Routes.SYNC` |
+| **Biometric auth** | ❌ | — | 2 | Not started |
+| **FCM / Push** | ❌ | — | 4 | Deep link infra planned |
+| **Multi-module Gradle** | ❌ | — | 4 | Single `:app` today |
 
 Legend: ✅ complete · 🔶 partial · ❌ not started / stub only
 
@@ -291,6 +297,7 @@ No CI workflows (`.github/workflows`) are configured yet.
 | Navigation route added/removed | **this file** (status table) + `README.md` § Navigation |
 | Sync engine behavior | `docs/SYNC_ENGINE.md` |
 | Architecture / layer boundaries | `docs/ARCHITECTURE.md` |
+| Product scope / phases / design system | `docs/PRODUCT_ARCHITECTURE.md`, `docs/DESIGN_SYSTEM.md` |
 | Build / SDK / API URL changes | `README.md` Quick Reference |
 | New doc file | `README.md` Documentation section + link from **this file** |
 
@@ -303,7 +310,9 @@ No CI workflows (`.github/workflows`) are configured yet.
 | Document | Purpose |
 |----------|---------|
 | [README.md](../README.md) | Human-readable overview, tech stack, build instructions |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Full target architecture: layers, navigation topology, Room schema, security |
+| [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) | **Design tokens:** Canopia-inspired colors, typography, shapes, `KfCard`, font attribution |
+| [PRODUCT_ARCHITECTURE.md](PRODUCT_ARCHITECTURE.md) | **Product spec:** multi-module layout, design system, bottom nav, roles, wireframes, phased rollout, migration |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Layer reference: Clean Architecture, Room schema, security, sync protocol |
 | [SYNC_ENGINE.md](SYNC_ENGINE.md) | Sync queue, handlers, WorkManager, conflict resolution, UI components |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) | Contribution guidelines incl. doc update expectations for humans |
 

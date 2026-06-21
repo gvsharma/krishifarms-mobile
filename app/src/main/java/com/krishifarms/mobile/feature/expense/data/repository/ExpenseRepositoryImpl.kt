@@ -126,8 +126,10 @@ class ExpenseRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun syncPending() = withContext(dispatchers.io) {
-        offlineSyncEngine.processQueue()
+    override suspend fun syncPending() {
+        withContext(dispatchers.io) {
+            offlineSyncEngine.processQueue()
+        }
     }
 
     private fun scheduleSync() {
