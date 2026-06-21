@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">కృషి ఫార్మ్స్</string>
+
+    <!-- Login -->
+    <string name="login_title">సైన్ ఇన్</string>
+    <string name="login_subtitle">మీ చేతివేలికల్లో వ్యవసాయ నిర్వహణ</string>
+    <string name="mobile_number_label">మొబైల్ నంబర్</string>
+    <string name="mobile_number_hint">10-అంకెల మొబైల్ నంబర్</string>
+    <string name="password_label">పాస్‌వర్డ్</string>
+    <string name="password_hint">మీ పాస్‌వర్డ్‌ను నమోదు చేయండి</string>
+    <string name="remember_login">లాగిన్ గుర్తుంచుకో</string>
+    <string name="login_button">లాగిన్</string>
+    <string name="show_password">పాస్‌వర్డ్ చూపించు</string>
+    <string name="hide_password">పాస్‌వర్డ్ దాచు</string>
+
+    <!-- Validation -->
+    <string name="error_mobile_required">మొబైల్ నంబర్ అవసరం</string>
+    <string name="error_mobile_invalid">చెల్లుబాటు అయ్యే 10-అంకెల Indian mobile number నమోదు చేయండి</string>
+    <string name="error_password_required">పాస్‌వర్డ్ అవసరం</string>
+    <string name="error_password_too_short">పాస్‌వర్డ్ కనీసం %1$d అక్షరాలు ఉండాలి</string>
+
+    <!-- Navigation -->
+    <string name="nav_dashboard">డాష్‌బోర్డ్</string>
+    <string name="nav_farmers">రైతులు</string>
+    <string name="nav_farms">పొలాలు</string>
+    <string name="nav_procurement">సేకరణ</string>
+    <string name="nav_farmer_payments">రైతు చెల్లింపులు</string>
+    <string name="nav_workers">కార్మికులు</string>
+    <string name="nav_work_orders">పని ఆదేశాలు</string>
+    <string name="nav_attendance">హాజరు</string>
+    <string name="nav_expenses">ఖర్చులు</string>
+    <string name="nav_collections">సేకరణలు</string>
+    <string name="nav_payments">చెల్లింపులు</string>
+    <string name="nav_vehicles">వాహనాలు</string>
+    <string name="nav_vehicle_trips">వాహన ప్రయాణాలు</string>
+    <string name="nav_assets">ఆస్తులు</string>
+    <string name="nav_rentals">అద్దెలు</string>
+    <string name="nav_documents">పత్రాలు</string>
+    <string name="nav_settings">సెట్టింగ్‌లు</string>
+    <string name="nav_sync">సమకాలీకరణ</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">డాష్‌బోర్డ్</string>
+    <string name="dashboard_welcome">KrishiFarms CRM కు స్వాగతం</string>
+    <string name="dashboard_last_updated">చివరిగా నవీకరించబడింది: %1$s</string>
+    <string name="dashboard_cached_data">కాష్ డేటా</string>
+    <string name="dashboard_empty_title">ఇంకా డాష్‌బోర్డ్ డేటా లేదు</string>
+    <string name="dashboard_empty_message">కార్యకలాపం నమోదు చేసిన తర్వాత సారాంశ మెట్రిక్‌లు ఇక్కడ కనిపిస్తాయి.</string>
+    <string name="dashboard_card_todays_procurement">నేటి సేకరణ</string>
+    <string name="dashboard_card_todays_expenses">నేటి ఖర్చులు</string>
+    <string name="dashboard_card_todays_collections">నేటి సేకరణలు</string>
+    <string name="dashboard_card_pending_farmer_payments">పెండింగ్ రైతు చెల్లింపులు</string>
+    <string name="dashboard_card_pending_collections">పెండింగ్ సేకరణలు</string>
+    <string name="dashboard_card_worker_attendance">కార్మిక హాజరు</string>
+    <string name="dashboard_card_active_rentals">సక్రియ అద్దెలు</string>
+    <string name="logout_button">లాగ్ అవుట్</string>
+
+    <!-- Common -->
+    <string name="common_loading">లోడ్ అవుతోంది…</string>
+    <string name="common_error">ఏదో తప్పు జరిగింది</string>
+    <string name="common_retry">మళ్లీ ప్రయత్నించండి</string>
+    <string name="common_back">వెనుకకు</string>
+    <string name="common_menu">మెనూ</string>
+    <string name="common_save">సేవ్</string>
+    <string name="common_cancel">రద్దు</string>
+    <string name="common_search">వెతకండి</string>
+    <string name="common_offline">మీరు ఆఫ్‌లైన్‌లో ఉన్నారు. కనెక్ట్ అయినప్పుడు మార్పులు సమకాలీకరించబడతాయి.</string>
+    <string name="common_sync_status_synced">సమకాలీకరించబడింది</string>
+    <string name="common_sync_status_pending">సమకాలీకరణ పెండింగ్</string>
+    <string name="common_sync_status_failed">సమకాలీకరణ విఫలమైంది</string>
+    <string name="common_no_data">డేటా అందుబాటులో లేదు</string>
+    <string name="feature_coming_soon">త్వరలో వస్తోంది</string>
+
+    <!-- Farmers -->
+    <string name="farmer_list_title">రైతులు</string>
+    <string name="farmer_detail_title">రైతు వివరాలు</string>
+    <string name="farmer_add_title">రైతును జోడించండి</string>
+    <string name="farmer_edit_title">రైతును సవరించండి</string>
+    <string name="farmer_add">రైతును జోడించండి</string>
+    <string name="farmer_edit">రైతును సవరించండి</string>
+    <string name="farmer_search_hint">పేరు, గ్రామం లేదా ఫోన్ ద్వారా వెతకండి</string>
+    <string name="farmer_empty">రైతులు కనుగొనబడలేదు</string>
+    <string name="farmer_field_name">పేరు</string>
+    <string name="farmer_field_village">గ్రామం</string>
+    <string name="farmer_field_phone">ఫోన్</string>
+    <string name="farmer_field_bank_details">బ్యాంక్ వివరాలు</string>
+    <string name="farmer_field_land_acres">భూమి (ఎకరాలు)</string>
+    <string name="farmer_field_crop_types">పంట రకాలు</string>
+    <string name="farmer_error_name_required">పేరు అవసరం</string>
+    <string name="farmer_error_village_required">గ్రామం అవసరం</string>
+    <string name="farmer_error_phone_required">ఫోన్ నంబర్ అవసరం</string>
+    <string name="farmer_error_bank_required">బ్యాంక్ వివరాలు అవసరం</string>
+    <string name="farmer_error_land_acres_invalid">0 కంటే ఎక్కువ చెల్లుబాటు అయ్యే భూమి విస్తీర్ణం నమోదు చేయండి</string>
+    <string name="farmer_error_crop_types_required">కనీసం ఒక పంట రకాన్ని ఎంచుకోండి</string>
+
+    <!-- Feature stubs -->
+    <string name="farmers_title">రైతులు</string>
+    <string name="farmers_subtitle">రైతు ప్రొఫైల్‌లు మరియు రికార్డ్‌లను నిర్వహించండి</string>
+    <string name="farms_title">పొలాలు</string>
+    <string name="farms_subtitle">పొలం ప్లాట్‌లు, విస్తీర్ణం మరియు స్థానాలను ట్రాక్ చేయండి</string>
+    <string name="procurement_title">సేకరణ</string>
+    <string name="procurement_subtitle">పంట స్వీకరణ మరియు బరువు రికార్డ్ చేయండి</string>
+    <string name="expenses_title">ఖర్చులు</string>
+    <string name="expenses_subtitle">వ్యవసాయ మరియు నిర్వహణ ఖర్చులను ట్రాక్ చేయండి</string>
+    <string name="collections_title">సేకరణలు</string>
+    <string name="collections_subtitle">ఇన్‌కమింగ్ సేకరణలు మరియు రసీదులను నిర్వహించండి</string>
+    <string name="farmer_payments_title">రైతు చెల్లింపులు</string>
+    <string name="farmer_payments_subtitle">రైతు చెల్లింపులు మరియు చెల్లింపు చరిత్ర</string>
+    <string name="workers_title">కార్మికులు</string>
+    <string name="workers_subtitle">ఫీల్డ్ సిబ్బంది కేటాయింపులు మరియు హాజరు</string>
+    <string name="work_orders_title">పని ఆదేశాలు</string>
+    <string name="work_orders_subtitle">ఫీల్డ్ పని ఆదేశాలను కేటాయించి ట్రాక్ చేయండి</string>
+    <string name="attendance_title">హాజరు</string>
+    <string name="attendance_subtitle">కార్మిక హాజరు మరియు షిఫ్ట్ రికార్డ్‌లు</string>
+    <string name="payments_title">చెల్లింపులు</string>
+    <string name="payments_subtitle">చెల్లింపు రికార్డ్‌లు మరియు విడుదలలు</string>
+    <string name="vehicles_title">వాహనాలు</string>
+    <string name="vehicles_subtitle">ఫ్లీట్ నమోదు మరియు నిర్వహణ</string>
+    <string name="vehicle_trips_title">వాహన ప్రయాణాలు</string>
+    <string name="vehicle_trips_subtitle">ప్రయాణ లాగ్‌లు మరియు రవాణా ట్రాకింగ్</string>
+    <string name="assets_title">ఆస్తులు</string>
+    <string name="assets_subtitle">పరికరాలు మరియు ఆస్తి ఇన్వెంటరీ</string>
+    <string name="rentals_title">అద్దెలు</string>
+    <string name="rentals_subtitle">సక్రియ అద్దె ఒప్పందాలు మరియు ఆస్తులు</string>
+    <string name="farms_title">పొలాలు</string>
+    <string name="farms_subtitle">పొలం ప్లాట్‌లు, విస్తీర్ణం మరియు స్థానాలను ట్రాక్ చేయండి</string>
+    <string name="payments_title">చెల్లింపులు</string>
+    <string name="payments_subtitle">అవుట్‌గోయింగ్ ఆపరేషనల్ చెల్లింపులు</string>
+    <string name="vehicles_title">వాహనాలు</string>
+    <string name="vehicles_subtitle">ఫ్లీట్ నమోదు మరియు నిర్వహణ</string>
+    <string name="vehicle_trips_title">వాహన ప్రయాణాలు</string>
+    <string name="vehicle_trips_subtitle">రవాణా, ట్రాన్స్‌పోర్ట్ మరియు ప్రయాణ లాగ్‌లు</string>
+    <string name="assets_title">ఆస్తులు</string>
+    <string name="assets_subtitle">పరికరాలు మరియు ఆస్తి ఇన్వెంటరీ</string>
+    <string name="documents_title">పత్రాలు</string>
+    <string name="documents_subtitle">ఒప్పందాలు, రసీదులు మరియు అటాచ్‌మెంట్‌లు</string>
+    <string name="sync_title">సమకాలీకరణ కేంద్రం</string>
+    <string name="sync_subtitle">పెండింగ్ ఆఫ్‌లైన్ మార్పులను సమీక్షించి మళ్లీ ప్రయత్నించండి</string>
+    <string name="workers_subtitle">ఫీల్డ్ సిబ్బంది కేటాయింపులు మరియు హాజరు</string>
+    <string name="work_orders_subtitle">ఫీల్డ్ పని ఆదేశాలను కేటాయించి ట్రాక్ చేయండి</string>
+    <string name="documents_title">పత్రాలు</string>
+    <string name="documents_subtitle">ఒప్పందాలు, రసీదులు మరియు అటాచ్‌మెంట్‌లు</string>
+    <string name="settings_title">సెట్టింగ్‌లు</string>
+    <string name="settings_subtitle">యాప్ ప్రాధాన్యతలు మరియు భాష</string>
+    <string name="sync_title">సమకాలీకరణ కేంద్రం</string>
+    <string name="sync_subtitle">పెండింగ్ ఆఫ్‌లైన్ మార్పులను సమీక్షించి మళ్లీ ప్రయత్నించండి</string>
+
+    <plurals name="dashboard_card_items">
+        <item quantity="one">%d అంశం</item>
+        <item quantity="other">%d అంశాలు</item>
+    </plurals>
+
+    <!-- Expenses -->
+    <string name="expense_list_title">ఖర్చులు</string>
+    <string name="expense_detail_title">ఖర్చు వివరాలు</string>
+    <string name="expense_form_title">ఖర్చు జోడించండి</string>
+    <string name="expense_add">ఖర్చు జోడించు</string>
+    <string name="expense_search_hint">వివరణ లేదా విక్రేత ద్వారా వెతకండి</string>
+    <string name="expense_empty">ఖర్చులు రికార్డ్ చేయబడలేదు</string>
+    <string name="expense_pending_sync">%1$d సమకాలీకరణ పెండింగ్</string>
+    <string name="expense_filter_all">అన్నీ</string>
+    <string name="expense_filter_last_7_days">గత 7 రోజులు</string>
+    <string name="expense_clear_filters">ఫిల్టర్‌లను క్లియర్ చేయండి</string>
+    <string name="expense_field_category">వర్గం</string>
+    <string name="expense_field_amount">మొత్తం</string>
+    <string name="expense_field_date">తేదీ</string>
+    <string name="expense_field_description">వివరణ / నోట్స్</string>
+    <string name="expense_field_vendor">విక్రేత (ఐచ్ఛికం)</string>
+    <string name="expense_field_payment_method">చెల్లింపు పద్ధతి (ఐచ్ఛికం)</string>
+    <string name="expense_field_bill">బిల్ అటాచ్‌మెంట్</string>
+    <string name="expense_bill_hint">కెమెరా లేదా గ్యాలరీ నుండి బిల్ ఫోటో అటాచ్ చేయండి</string>
+    <string name="expense_remove_bill">బిల్ తొలగించు</string>
+    <string name="expense_pick_gallery">గ్యాలరీ</string>
+    <string name="expense_take_photo">కెమెరా</string>
+    <string name="expense_pick_date">తేదీ ఎంచుకోండి</string>
+    <string name="expense_no_bill">బిల్ అటాచ్ చేయబడలేదు</string>
+    <string name="expense_payment_not_set">పేర్కొనబడలేదు</string>
+    <string name="expense_error_amount_required">చెల్లుబాటు అయ్యే మొత్తం నమోదు చేయండి</string>
+    <string name="expense_error_description_required">వివరణ అవసరం</string>
+    <string name="expense_category_fuel">ఇంధనం</string>
+    <string name="expense_category_labour">కూలీ</string>
+    <string name="expense_category_repairs">మరమ్మతులు</string>
+    <string name="expense_category_fertilizers">ఎరువులు</string>
+    <string name="expense_category_seeds">విత్తనాలు</string>
+    <string name="expense_category_transport">రవాణా</string>
+    <string name="expense_category_miscellaneous">ఇతర</string>
+    <string name="expense_payment_cash">నగదు</string>
+    <string name="expense_payment_upi">UPI</string>
+    <string name="expense_payment_bank_transfer">బ్యాంక్ బదిలీ</string>
+    <string name="expense_payment_cheque">చెక్</string>
+    <string name="expense_payment_other">ఇతర</string>
+
+    <!-- Documents -->
+    <string name="document_upload_title">పత్రం అప్‌లోడ్ చేయండి</string>
+    <string name="document_capture_title">ఫోటో తీయండి</string>
+    <string name="document_capture_button">క్యాప్చర్</string>
+    <string name="document_preview_title">పత్రం ప్రివ్యూ</string>
+    <string name="document_type_label">పత్రం రకం</string>
+    <string name="document_add_attachment">పత్రం జోడించండి</string>
+    <string name="document_source_picker_title">మూలాన్ని ఎంచుకోండి</string>
+    <string name="document_source_camera">కెమెరా</string>
+    <string name="document_source_gallery">గ్యాలరీ</string>
+    <string name="document_list_empty">ఇంకా పత్రాలు అప్‌లోడ్ కాలేదు</string>
+    <string name="document_type_fuel_bill">ఇంధన బిల్లు</string>
+    <string name="document_type_crop_bill">పంట బిల్లు</string>
+    <string name="document_type_receipt">రసీదు</string>
+    <string name="document_type_upi_screenshot">UPI స్క్రీన్‌షాట్</string>
+    <string name="document_type_photo">ఫోటో</string>
+</resources>

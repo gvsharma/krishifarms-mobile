@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KrishiFarms</string>
+
+    <!-- Login -->
+    <string name="login_title">Sign In</string>
+    <string name="login_subtitle">Farm management at your fingertips</string>
+    <string name="mobile_number_label">Mobile Number</string>
+    <string name="mobile_number_hint">10-digit mobile number</string>
+    <string name="password_label">Password</string>
+    <string name="password_hint">Enter your password</string>
+    <string name="remember_login">Remember login</string>
+    <string name="login_button">Login</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+
+    <!-- Validation -->
+    <string name="error_mobile_required">Mobile number is required</string>
+    <string name="error_mobile_invalid">Enter a valid 10-digit Indian mobile number</string>
+    <string name="error_password_required">Password is required</string>
+    <string name="error_password_too_short">Password must be at least %1$d characters</string>
+
+    <!-- Navigation -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_farmers">Farmers</string>
+    <string name="nav_farms">Farms</string>
+    <string name="nav_procurement">Procurement</string>
+    <string name="nav_farmer_payments">Farmer Payments</string>
+    <string name="nav_workers">Workers</string>
+    <string name="nav_work_orders">Work Orders</string>
+    <string name="nav_attendance">Attendance</string>
+    <string name="nav_expenses">Expenses</string>
+    <string name="nav_collections">Collections</string>
+    <string name="nav_payments">Payments</string>
+    <string name="nav_vehicles">Vehicles</string>
+    <string name="nav_vehicle_trips">Vehicle Trips</string>
+    <string name="nav_assets">Assets</string>
+    <string name="nav_rentals">Rentals</string>
+    <string name="nav_documents">Documents</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_sync">Sync</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_welcome">Welcome to KrishiFarms CRM</string>
+    <string name="dashboard_last_updated">Last updated: %1$s</string>
+    <string name="dashboard_cached_data">Cached data</string>
+    <string name="dashboard_empty_title">No dashboard data yet</string>
+    <string name="dashboard_empty_message">Summary metrics will appear here once activity is recorded.</string>
+    <string name="dashboard_card_todays_procurement">Today\'s Procurement</string>
+    <string name="dashboard_card_todays_expenses">Today\'s Expenses</string>
+    <string name="dashboard_card_todays_collections">Today\'s Collections</string>
+    <string name="dashboard_card_pending_farmer_payments">Pending Farmer Payments</string>
+    <string name="dashboard_card_pending_collections">Pending Collections</string>
+    <string name="dashboard_card_worker_attendance">Worker Attendance</string>
+    <string name="dashboard_card_active_rentals">Active Rentals</string>
+    <string name="logout_button">Logout</string>
+
+    <!-- Common -->
+    <string name="common_loading">Loading…</string>
+    <string name="common_error">Something went wrong</string>
+    <string name="common_retry">Retry</string>
+    <string name="common_back">Back</string>
+    <string name="common_menu">Menu</string>
+    <string name="common_save">Save</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_search">Search</string>
+    <string name="common_offline">You are offline. Changes will sync when connected.</string>
+    <string name="common_sync_status_synced">Synced</string>
+    <string name="common_sync_status_pending">Pending sync</string>
+    <string name="common_sync_status_failed">Sync failed</string>
+    <string name="sync_status_synced">All changes synced</string>
+    <string name="sync_status_pending">%1$d pending</string>
+    <string name="sync_status_offline">Offline</string>
+    <string name="sync_status_syncing">Syncing…</string>
+    <string name="sync_debug_title">Failed sync items</string>
+    <string name="sync_debug_empty">No failed or conflicted sync operations</string>
+    <string name="common_no_data">No data available</string>
+    <string name="feature_coming_soon">Coming soon</string>
+
+    <!-- Feature stubs -->
+    <string name="farmers_title">Farmers</string>
+    <string name="farmers_subtitle">Manage farmer profiles and records</string>
+
+    <!-- Farmers -->
+    <string name="farmer_list_title">Farmers</string>
+    <string name="farmer_detail_title">Farmer Details</string>
+    <string name="farmer_add_title">Add Farmer</string>
+    <string name="farmer_edit_title">Edit Farmer</string>
+    <string name="farmer_add">Add farmer</string>
+    <string name="farmer_edit">Edit farmer</string>
+    <string name="farmer_search_hint">Search by name, village, or phone</string>
+    <string name="farmer_empty">No farmers found</string>
+    <string name="farmer_field_name">Name</string>
+    <string name="farmer_field_village">Village</string>
+    <string name="farmer_field_phone">Phone</string>
+    <string name="farmer_field_bank_details">Bank Details</string>
+    <string name="farmer_field_land_acres">Land (Acres)</string>
+    <string name="farmer_field_crop_types">Crop Types</string>
+    <string name="farmer_error_name_required">Name is required</string>
+    <string name="farmer_error_village_required">Village is required</string>
+    <string name="farmer_error_phone_required">Phone number is required</string>
+    <string name="farmer_error_bank_required">Bank details are required</string>
+    <string name="farmer_error_land_acres_invalid">Enter a valid land area greater than 0</string>
+    <string name="farmer_error_crop_types_required">Select at least one crop type</string>
+
+    <string name="farms_title">Farms</string>
+    <string name="farms_subtitle">Track farm plots, acreage, and locations</string>
+    <string name="procurement_title">Procurement</string>
+    <string name="procurement_subtitle">Record crop intake and weighment</string>
+    <string name="expenses_title">Expenses</string>
+    <string name="expenses_subtitle">Track farm and operational expenses</string>
+    <string name="collections_title">Collections</string>
+    <string name="collections_subtitle">Manage incoming collections and receipts</string>
+    <string name="farmer_payments_title">Farmer Payments</string>
+    <string name="farmer_payments_subtitle">Farmer payouts and payment history</string>
+    <string name="workers_title">Workers</string>
+    <string name="workers_subtitle">Field staff assignments and attendance</string>
+    <string name="work_orders_title">Work Orders</string>
+    <string name="work_orders_subtitle">Assign and track field work orders</string>
+    <string name="attendance_title">Attendance</string>
+    <string name="attendance_subtitle">Worker attendance and shift records</string>
+    <string name="payments_title">Payments</string>
+    <string name="payments_subtitle">Payment records and disbursements</string>
+    <string name="vehicles_title">Vehicles</string>
+    <string name="vehicles_subtitle">Fleet registration and maintenance</string>
+    <string name="vehicle_trips_title">Vehicle Trips</string>
+    <string name="vehicle_trips_subtitle">Trip logs and transport tracking</string>
+    <string name="assets_title">Assets</string>
+    <string name="assets_subtitle">Equipment and asset inventory</string>
+    <string name="rentals_title">Rentals</string>
+    <string name="rentals_subtitle">Active rental agreements and assets</string>
+    <string name="documents_title">Documents</string>
+    <string name="documents_subtitle">Contracts, receipts, and attachments</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_subtitle">App preferences and language</string>
+    <string name="sync_title">Sync Center</string>
+    <string name="sync_subtitle">Review and retry pending offline changes</string>
+
+    <plurals name="dashboard_card_items">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+
+    <!-- Expenses -->
+    <string name="expense_list_title">Expenses</string>
+    <string name="expense_detail_title">Expense Details</string>
+    <string name="expense_form_title">Add Expense</string>
+    <string name="expense_add">Add expense</string>
+    <string name="expense_search_hint">Search by description or vendor</string>
+    <string name="expense_empty">No expenses recorded</string>
+    <string name="expense_pending_sync">%1$d pending sync</string>
+    <string name="expense_filter_all">All</string>
+    <string name="expense_filter_last_7_days">Last 7 days</string>
+    <string name="expense_clear_filters">Clear filters</string>
+    <string name="expense_field_category">Category</string>
+    <string name="expense_field_amount">Amount</string>
+    <string name="expense_field_date">Date</string>
+    <string name="expense_field_description">Description / Notes</string>
+    <string name="expense_field_vendor">Vendor (optional)</string>
+    <string name="expense_field_payment_method">Payment method (optional)</string>
+    <string name="expense_field_bill">Bill attachment</string>
+    <string name="expense_bill_hint">Attach a bill photo from camera or gallery</string>
+    <string name="expense_remove_bill">Remove bill</string>
+    <string name="expense_pick_gallery">Gallery</string>
+    <string name="expense_take_photo">Camera</string>
+    <string name="expense_pick_date">Pick date</string>
+    <string name="expense_no_bill">No bill attached</string>
+    <string name="expense_payment_not_set">Not specified</string>
+    <string name="expense_error_amount_required">Enter a valid amount</string>
+    <string name="expense_error_description_required">Description is required</string>
+    <string name="expense_category_fuel">Fuel</string>
+    <string name="expense_category_labour">Labour</string>
+    <string name="expense_category_repairs">Repairs</string>
+    <string name="expense_category_fertilizers">Fertilizers</string>
+    <string name="expense_category_seeds">Seeds</string>
+    <string name="expense_category_transport">Transport</string>
+    <string name="expense_category_miscellaneous">Miscellaneous</string>
+    <string name="expense_payment_cash">Cash</string>
+    <string name="expense_payment_upi">UPI</string>
+    <string name="expense_payment_bank_transfer">Bank transfer</string>
+    <string name="expense_payment_cheque">Cheque</string>
+    <string name="expense_payment_other">Other</string>
+
+    <!-- Documents -->
+    <string name="document_upload_title">Upload Document</string>
+    <string name="document_capture_title">Capture Photo</string>
+    <string name="document_capture_button">Capture</string>
+    <string name="document_preview_title">Document Preview</string>
+    <string name="document_type_label">Document type</string>
+    <string name="document_add_attachment">Add document</string>
+    <string name="document_source_picker_title">Choose source</string>
+    <string name="document_source_camera">Camera</string>
+    <string name="document_source_gallery">Gallery</string>
+    <string name="document_list_empty">No documents uploaded yet</string>
+    <string name="document_type_fuel_bill">Fuel Bill</string>
+    <string name="document_type_crop_bill">Crop Bill</string>
+    <string name="document_type_receipt">Receipt</string>
+    <string name="document_type_upi_screenshot">UPI Screenshot</string>
+    <string name="document_type_photo">Photo</string>
+</resources>
