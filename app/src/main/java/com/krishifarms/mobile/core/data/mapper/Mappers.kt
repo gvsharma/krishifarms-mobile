@@ -4,19 +4,13 @@ import com.krishifarms.mobile.core.common.SyncStatus
 import com.krishifarms.mobile.core.database.entity.FarmerEntity
 import com.krishifarms.mobile.core.database.entity.FarmEntity
 import com.krishifarms.mobile.core.database.entity.PaymentEntity
-import com.krishifarms.mobile.core.database.entity.ProcurementEntity
 import com.krishifarms.mobile.core.database.entity.SyncMetadata
-import com.krishifarms.mobile.core.database.entity.WorkerEntity
 import com.krishifarms.mobile.core.domain.model.Farmer
 import com.krishifarms.mobile.core.domain.model.Farm
 import com.krishifarms.mobile.core.domain.model.Payment
-import com.krishifarms.mobile.core.domain.model.Procurement
-import com.krishifarms.mobile.core.domain.model.Worker
 import com.krishifarms.mobile.core.network.dto.FarmerDtos
 import com.krishifarms.mobile.core.network.dto.FarmDtos
 import com.krishifarms.mobile.core.network.dto.PaymentDtos
-import com.krishifarms.mobile.core.network.dto.ProcurementDtos
-import com.krishifarms.mobile.core.network.dto.WorkerDtos
 
 fun FarmerEntity.toDomain(): Farmer = Farmer(
     id = id,
@@ -77,34 +71,6 @@ fun FarmEntity.toDomain(): Farm = Farm(
     syncStatus = sync.syncStatus,
 )
 
-fun ProcurementDtos.ProcurementDto.toEntity(): ProcurementEntity = ProcurementEntity(
-    id = id,
-    farmerId = farmerId,
-    farmId = farmId,
-    cropName = cropName,
-    quantityKg = quantityKg,
-    ratePerKg = ratePerKg,
-    totalAmount = totalAmount,
-    procuredAt = procuredAt,
-    sync = SyncMetadata(
-        syncStatus = SyncStatus.SYNCED,
-        lastSyncedAt = updatedAt,
-        localUpdatedAt = updatedAt,
-    ),
-)
-
-fun ProcurementEntity.toDomain(): Procurement = Procurement(
-    id = id,
-    farmerId = farmerId,
-    farmId = farmId,
-    cropName = cropName,
-    quantityKg = quantityKg,
-    ratePerKg = ratePerKg,
-    totalAmount = totalAmount,
-    procuredAt = procuredAt,
-    syncStatus = sync.syncStatus,
-)
-
 fun PaymentDtos.PaymentDto.toEntity(): PaymentEntity = PaymentEntity(
     id = id,
     farmerId = farmerId,
@@ -126,30 +92,6 @@ fun PaymentEntity.toDomain(): Payment = Payment(
     paymentMode = paymentMode,
     referenceNumber = referenceNumber,
     paidAt = paidAt,
-    syncStatus = sync.syncStatus,
-)
-
-fun WorkerDtos.WorkerDto.toEntity(): WorkerEntity = WorkerEntity(
-    id = id,
-    name = name,
-    phone = phone,
-    role = role,
-    assignedRegion = assignedRegion,
-    active = active,
-    sync = SyncMetadata(
-        syncStatus = SyncStatus.SYNCED,
-        lastSyncedAt = updatedAt,
-        localUpdatedAt = updatedAt,
-    ),
-)
-
-fun WorkerEntity.toDomain(): Worker = Worker(
-    id = id,
-    name = name,
-    phone = phone,
-    role = role,
-    assignedRegion = assignedRegion,
-    active = active,
     syncStatus = sync.syncStatus,
 )
 

@@ -289,46 +289,6 @@ object DocumentDtos {
     )
 }
 
-object WorkerDtos {
-    @Serializable
-    data class WorkerListResponse(
-        val data: List<WorkerDto>,
-        val page: Int,
-    )
-
-    @Serializable
-    data class WorkerDto(
-        val id: String,
-        val name: String,
-        val phone: String,
-        val role: String,
-        @SerialName("assigned_region")
-        val assignedRegion: String,
-        val active: Boolean = true,
-        @SerialName("updated_at")
-        val updatedAt: Long,
-    )
-
-    @Serializable
-    data class CreateWorkerRequest(
-        val name: String,
-        val phone: String,
-        val role: String,
-        @SerialName("assigned_region")
-        val assignedRegion: String,
-    )
-
-    @Serializable
-    data class UpdateWorkerRequest(
-        val name: String? = null,
-        val phone: String? = null,
-        val role: String? = null,
-        @SerialName("assigned_region")
-        val assignedRegion: String? = null,
-        val active: Boolean? = null,
-    )
-}
-
 object SyncDtos {
     @Serializable
     data class PushRequest(

@@ -12,7 +12,6 @@ import com.krishifarms.mobile.core.sync.domain.SyncHandler
 import com.krishifarms.mobile.core.sync.domain.SyncHandlerResult
 import com.krishifarms.mobile.core.sync.domain.SyncOperationType
 import kotlinx.serialization.json.Json
-import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -87,15 +86,5 @@ class FarmerSyncHandler @Inject constructor(
                 payloadJson = json.encodeToString(FarmerDtos.FarmerDto.serializer(), dto),
             )
         }.getOrNull()
-    }
-
-    override fun mapHttpException(exception: HttpException): SyncHandlerResult {
-        if (exception.code() == 409) {
-            return SyncHandlerResult.Conflict(
-                serverSnapshot = RemoteEntitySnapshot("", 0L, "{}"),
-                clientUpdatedAt = System.currentTimeMillis(),
-            )
-        }
-        return super.mapHttpException(exception)
     }
 }

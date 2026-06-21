@@ -12,8 +12,8 @@ import com.krishifarms.mobile.core.network.WorkOrderApiService
 import com.krishifarms.mobile.core.network.dto.WorkerDtos
 import com.krishifarms.mobile.core.network.safeApiCall
 import com.krishifarms.mobile.feature.worker.data.mapper.buildWorkOrderEntity
-import com.krishifarms.mobile.feature.worker.data.mapper.toDomain
 import com.krishifarms.mobile.feature.worker.data.mapper.toEntity
+import com.krishifarms.mobile.feature.worker.data.mapper.toWorkOrderDomain
 import com.krishifarms.mobile.feature.worker.domain.model.WorkOrder
 import com.krishifarms.mobile.feature.worker.domain.repository.WorkOrderRepository
 import kotlinx.coroutines.flow.Flow
@@ -36,10 +36,10 @@ class WorkOrderRepositoryImpl @Inject constructor(
         farmId: String?,
     ): Flow<List<WorkOrder>> =
         workOrderDao.observeFiltered(workerId, activityType, farmId)
-            .map { list -> list.map { it.toDomain() } }
+            .map { list -> list.map { it.toWorkOrderDomain() } }
 
     override fun observeWorkOrder(id: String): Flow<WorkOrder?> =
-        workOrderDao.observeById(id).map { it?.toDomain() }
+        workOrderDao.observeById(id).map { it?.toWorkOrderDomain() }
 
     override suspend fun saveWorkOrder(
         id: String?,
@@ -83,7 +83,7 @@ class WorkOrderRepositoryImpl @Inject constructor(
         if (networkMonitor.isOnline()) {
             syncSingleWorkOrder(entity)
         } else {
-            Resource.Success(entity.toDomain())
+            Resource.Success(entity.toWorkOrderDomain())
         }
     }
 
@@ -107,7 +107,7 @@ class WorkOrderRepositoryImpl @Inject constructor(
         if (entity.sync.syncStatus != SyncStatus.PENDING_CREATE &&
             entity.sync.syncStatus != SyncStatus.PENDING_UPDATE
         ) {
-            return Resource.Success(entity.toDomain())
+            return Resource.Success(entity.toWorkOrderDomain())
         }
 
         val request = WorkerDtos.CreateWorkOrderRequest(
@@ -124,7 +124,7 @@ class WorkOrderRepositoryImpl @Inject constructor(
             is NetworkResult.Success -> {
                 val synced = result.data.toEntity(localId = entity.id)
                 workOrderDao.upsert(synced)
-                Resource.Success(synced.toDomain())
+                Resource.Success(synced.toWorkOrderDomain())
             }
             is NetworkResult.Error -> {
                 workOrderDao.upsert(

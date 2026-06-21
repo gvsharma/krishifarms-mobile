@@ -52,7 +52,7 @@ import com.krishifarms.mobile.feature.dashboard.data.local.entity.DashboardSumma
         SyncConflictEntity::class,
         DashboardSummaryEntity::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
 )
 @TypeConverters(
