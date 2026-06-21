@@ -1,0 +1,15 @@
+SIL OPEN FONT LICENSE Version 1.1 — 26 February 2007
+
+Fonts in this directory (Plus Jakarta Sans, Inter) are distributed under the
+SIL Open Font License, Version 1.1.
+
+Copyright 2020 The Plus Jakarta Sans Project Authors
+(https://github.com/tokotype/PlusJakartaSans)
+
+Copyright 2020 The Inter Project Authors
+(https://github.com/rsms/inter)
+
+Source: Google Fonts (https://fonts.google.com)
+License: https://openfontlicense.org
+
+Full license text: https://scripts.sil.org/OFL
