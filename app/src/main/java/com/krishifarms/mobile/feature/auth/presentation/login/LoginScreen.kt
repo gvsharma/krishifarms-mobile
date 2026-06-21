@@ -1,6 +1,8 @@
 package com.krishifarms.mobile.feature.auth.presentation.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,15 +18,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Agriculture
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -49,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.krishifarms.mobile.R
 import com.krishifarms.mobile.core.common.Constants
+import com.krishifarms.mobile.core.ui.components.KfCard
 import com.krishifarms.mobile.feature.auth.presentation.AuthViewModel
 import com.krishifarms.mobile.feature.auth.presentation.LoginUiState
 
@@ -71,6 +76,7 @@ fun LoginScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
         when (val state = loginUiState) {
@@ -78,6 +84,7 @@ fun LoginScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
                         .padding(innerPadding)
                         .imePadding()
                         .verticalScroll(rememberScrollState())
@@ -85,9 +92,26 @@ fun LoginScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
+                    Box(
+                        modifier = Modifier
+                            .size(72.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                shape = MaterialTheme.shapes.large,
+                            ),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Agriculture,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(40.dp),
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = stringResource(R.string.app_name),
-                        style = MaterialTheme.typography.displayLarge,
+                        style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Center,
                     )
@@ -100,13 +124,7 @@ fun LoginScreen(
                     )
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface,
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                    ) {
+                    KfCard(modifier = Modifier.fillMaxWidth()) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -116,6 +134,12 @@ fun LoginScreen(
                             Text(
                                 text = stringResource(R.string.login_title),
                                 style = MaterialTheme.typography.titleLarge,
+                            )
+
+                            val textFieldColors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                                focusedLabelColor = MaterialTheme.colorScheme.primary,
                             )
 
                             OutlinedTextField(
@@ -129,6 +153,8 @@ fun LoginScreen(
                                 },
                                 isError = state.mobileError != null,
                                 singleLine = true,
+                                shape = MaterialTheme.shapes.small,
+                                colors = textFieldColors,
                                 keyboardOptions = KeyboardOptions(
                                     keyboardType = KeyboardType.Phone,
                                     imeAction = ImeAction.Next,
@@ -160,6 +186,8 @@ fun LoginScreen(
                                 },
                                 isError = state.passwordError != null,
                                 singleLine = true,
+                                shape = MaterialTheme.shapes.small,
+                                colors = textFieldColors,
                                 visualTransformation = if (passwordVisible) {
                                     VisualTransformation.None
                                 } else {
@@ -206,6 +234,11 @@ fun LoginScreen(
                                     .fillMaxWidth()
                                     .height(52.dp),
                                 enabled = !state.isSubmitting,
+                                shape = MaterialTheme.shapes.medium,
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                                ),
                             ) {
                                 if (state.isSubmitting) {
                                     CircularProgressIndicator(
@@ -214,7 +247,10 @@ fun LoginScreen(
                                         color = MaterialTheme.colorScheme.onPrimary,
                                     )
                                 } else {
-                                    Text(text = stringResource(R.string.login_button))
+                                    Text(
+                                        text = stringResource(R.string.login_button),
+                                        style = MaterialTheme.typography.labelLarge,
+                                    )
                                 }
                             }
                         }
