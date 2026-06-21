@@ -9,4 +9,5 @@ data class FarmerListUiState(
     val isRefreshing: Boolean = false,
     val isOffline: Boolean = false,
     val errorMessage: String? = null,
+    val canCreate: Boolean = false,
 )

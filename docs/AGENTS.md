@@ -46,12 +46,13 @@ Read these files **in order** before implementing or refactoring:
 | 3 | **Product architecture (target state)** | `docs/PRODUCT_ARCHITECTURE.md` |
 | 4 | Layer architecture reference | `docs/ARCHITECTURE.md` |
 | 5 | Sync engine reference | `docs/SYNC_ENGINE.md` |
-| 6 | Design system (colors, type, components) | `docs/DESIGN_SYSTEM.md`, `core/ui/theme/` |
-| 7 | Navigation & stubs | `core/navigation/MainNavGraph.kt`, `Routes.kt` |
-| 8 | Database schema | `core/database/KrishiFarmsDatabase.kt`, `entity/Entities.kt`, `dao/Daos.kt` |
-| 9 | Sync registration | `core/sync/SyncEngine.kt`, `core/sync/di/SyncModule.kt`, `core/sync/handler/` |
-| 10 | Reference feature (copy patterns) | `feature/farmer/` or `feature/procurement/` |
-| 11 | Strings (both locales) | `app/src/main/res/values/strings.xml`, `values-te/strings.xml` |
+| 6 | **RBAC implementation plan** | `docs/RBAC_IMPLEMENTATION_PLAN.md` |
+| 7 | Design system (colors, type, components) | `docs/DESIGN_SYSTEM.md`, `core/ui/theme/` |
+| 8 | Navigation & stubs | `core/navigation/MainNavGraph.kt`, `Routes.kt` |
+| 9 | Database schema | `core/database/KrishiFarmsDatabase.kt`, `entity/Entities.kt`, `dao/Daos.kt` |
+| 10 | Sync registration | `core/sync/SyncEngine.kt`, `core/sync/di/SyncModule.kt`, `core/sync/handler/` |
+| 11 | Reference feature (copy patterns) | `feature/farmer/` or `feature/procurement/` |
+| 12 | Strings (both locales) | `app/src/main/res/values/strings.xml`, `values-te/strings.xml` |
 
 Then grep for the feature route in `MainNavGraph.kt` to see if it is wired or still a `FeatureStubScreen`.
 
@@ -83,9 +84,11 @@ Then grep for the feature route in `MainNavGraph.kt` to see if it is wired or st
 | `core/database` | `KrishiFarmsDatabase`, entities, DAOs, type converters, `SyncMetadata` |
 | `core/data` | Shared repository impls (e.g. `SyncRepositoryImpl`) |
 | `core/domain` | Shared domain models and repository interfaces |
-| `core/navigation` | `KrishiFarmsNavHost`, `MainNavGraph`, `Routes`, stub screens |
+| `core/security` | RBAC — `SessionManager`, `PermissionManager`, `NavigationGuard`, `MenuRegistry`, dynamic menu |
+| `core/navigation` | `KrishiFarmsNavHost`, `MainNavGraph`, `MainBottomNav`, `Routes`, guarded navigation |
 | `core/sync` | **Sync engine** — `SyncEngine`, handlers, workers, conflict resolver, DI |
 | `core/ui` | Canopia-inspired M3 theme (`theme/`), `KfCard`, `SyncStatusIcon`, `SyncStatusIndicator`, `SyncDebugScreen`, placeholders |
+| `core/security` | **Planned (RBAC):** `session/`, `rbac/` — see [RBAC_IMPLEMENTATION_PLAN.md](RBAC_IMPLEMENTATION_PLAN.md) |
 | `core/util` | `ImageCompressor`, `DocumentFileManager`, `CameraXCapture`, attachment storage |
 
 ### `feature/` packages
@@ -110,7 +113,7 @@ Status reflects **code completeness** and **navigation wiring** in `MainNavGraph
 
 | Module | Code | Nav wired | Target phase | Notes |
 |--------|:----:|:---------:|:------------:|-------|
-| **Auth** | ✅ | ✅ | 1 | Mobile login, JWT, `EncryptedSharedPreferences` tokens → migrate to Proto DataStore + biometric (Phase 1–2) |
+| **Auth** | ✅ | ✅ | 1 | JWT + RBAC session (`SessionManager`, permissions/modules on login); debug legacy fallback when permissions empty |
 | **Dashboard** | ✅ | ✅ | 1 | KPI cards; refactor for bottom-nav Home tab |
 | **Farmer** | ✅ | ✅ | 1–2 | Full CRUD + `FarmerSyncHandler` — **copy this for new entities**; tabbed detail in Phase 2 |
 | **Procurement** | ✅ | ✅ | 1 | List, detail, create; sync is create-focused |
@@ -298,6 +301,7 @@ No CI workflows (`.github/workflows`) are configured yet.
 | Sync engine behavior | `docs/SYNC_ENGINE.md` |
 | Architecture / layer boundaries | `docs/ARCHITECTURE.md` |
 | Product scope / phases / design system | `docs/PRODUCT_ARCHITECTURE.md`, `docs/DESIGN_SYSTEM.md` |
+| RBAC / permissions / role gating | `docs/RBAC_IMPLEMENTATION_PLAN.md` |
 | Build / SDK / API URL changes | `README.md` Quick Reference |
 | New doc file | `README.md` Documentation section + link from **this file** |
 
@@ -312,6 +316,7 @@ No CI workflows (`.github/workflows`) are configured yet.
 | [README.md](../README.md) | Human-readable overview, tech stack, build instructions |
 | [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) | **Design tokens:** Canopia-inspired colors, typography, shapes, `KfCard`, font attribution |
 | [PRODUCT_ARCHITECTURE.md](PRODUCT_ARCHITECTURE.md) | **Product spec:** multi-module layout, design system, bottom nav, roles, wireframes, phased rollout, migration |
+| [RBAC_IMPLEMENTATION_PLAN.md](RBAC_IMPLEMENTATION_PLAN.md) | **RBAC rollout:** permission-driven UI, session model, navigation guards, migration phases |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Layer reference: Clean Architecture, Room schema, security, sync protocol |
 | [SYNC_ENGINE.md](SYNC_ENGINE.md) | Sync queue, handlers, WorkManager, conflict resolution, UI components |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) | Contribution guidelines incl. doc update expectations for humans |
@@ -322,7 +327,8 @@ No CI workflows (`.github/workflows`) are configured yet.
 
 | Item | Detail |
 |------|--------|
-| Login field | App sends `mobile` in `LoginRequest` — confirm backend accepts `mobile` vs `email` |
+| Login field | App sends `mobile` in `LoginRequest` — backend accepts `mobile` (maps to `user.phone`) or `email` |
+| RBAC | Login/refresh return `roles`, `permissions`, `accessibleModules`; debug uses `RBAC_STRICT_MODE=false` legacy fallback |
 | Sync debug route | Wire `SyncDebugScreen` at `Routes.SYNC` (currently `FeatureStubScreen`) |
 | Settings | Stub only; needs profile, language, sync status |
 | Multi-module Gradle split | Commented in `settings.gradle.kts`; not executed |

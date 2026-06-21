@@ -1,5 +1,7 @@
 package com.krishifarms.mobile.core.network
 
+import com.krishifarms.mobile.core.security.session.SessionManager
+import com.krishifarms.mobile.core.security.session.SessionSource
 import com.krishifarms.mobile.feature.auth.data.local.TokenStorage
 import com.krishifarms.mobile.feature.auth.data.remote.AuthApi
 import com.krishifarms.mobile.feature.auth.data.dto.RefreshTokenRequest
@@ -16,6 +18,7 @@ interface TokenRefresher {
 class TokenRefreshManager @Inject constructor(
     private val authApi: AuthApi,
     private val tokenStorage: TokenStorage,
+    private val sessionManager: SessionManager,
 ) : TokenRefresher {
 
     private val refreshMutex = Mutex()
@@ -27,6 +30,7 @@ class TokenRefreshManager @Inject constructor(
             val response = authApi.refreshToken(RefreshTokenRequest(refreshToken))
             val tokens = response.data
             tokenStorage.saveTokens(tokens.accessToken, tokens.refreshToken)
+            sessionManager.updateFromLogin(tokens, SessionSource.REFRESH)
             true
         }.getOrDefault(false)
     }

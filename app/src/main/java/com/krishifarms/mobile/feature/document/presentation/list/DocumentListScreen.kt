@@ -54,8 +54,10 @@ fun DocumentListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onUploadClick) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.document_add_attachment))
+            if (uiState.canUpload) {
+                FloatingActionButton(onClick = onUploadClick) {
+                    Icon(Icons.Default.Add, contentDescription = stringResource(R.string.document_add_attachment))
+                }
             }
         },
     ) { padding ->

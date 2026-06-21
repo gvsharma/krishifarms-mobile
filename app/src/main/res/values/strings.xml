@@ -22,6 +22,17 @@
 
     <!-- Navigation -->
     <string name="nav_dashboard">Dashboard</string>
+    <string name="bottom_nav_home">Home</string>
+    <string name="bottom_nav_operations">Operations</string>
+    <string name="bottom_nav_collect">Collect</string>
+    <string name="bottom_nav_finance">Finance</string>
+    <string name="bottom_nav_more">More</string>
+
+    <!-- RBAC -->
+    <string name="rbac_access_denied_title">Access denied</string>
+    <string name="rbac_access_denied_message">You do not have permission to view this screen.</string>
+    <string name="rbac_go_to_dashboard">Go to dashboard</string>
+    <string name="rbac_route_forbidden">You do not have access to that module.</string>
     <string name="nav_farmers">Farmers</string>
     <string name="nav_farms">Farms</string>
     <string name="nav_procurement">Procurement</string>

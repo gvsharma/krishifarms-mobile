@@ -65,8 +65,10 @@ fun ProcurementListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onCreateClick) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.procurement_add))
+            if (uiState.canCreate) {
+                FloatingActionButton(onClick = onCreateClick) {
+                    Icon(Icons.Default.Add, contentDescription = stringResource(R.string.procurement_add))
+                }
             }
         },
     ) { padding ->

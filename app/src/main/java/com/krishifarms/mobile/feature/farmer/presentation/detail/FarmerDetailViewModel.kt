@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krishifarms.mobile.core.navigation.Routes
+import com.krishifarms.mobile.core.security.rbac.ActionPermissions
+import com.krishifarms.mobile.core.security.rbac.PermissionManager
 import com.krishifarms.mobile.feature.farmer.domain.repository.FarmerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,11 +20,13 @@ import javax.inject.Inject
 class FarmerDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: FarmerRepository,
+    permissionManager: PermissionManager,
 ) : ViewModel() {
 
     private val farmerId: String = checkNotNull(savedStateHandle[Routes.FARMER_ID_ARG])
+    private val canEdit = ActionPermissions.from(permissionManager).farmer.canUpdate
 
-    private val _uiState = MutableStateFlow(FarmerDetailUiState())
+    private val _uiState = MutableStateFlow(FarmerDetailUiState(canEdit = canEdit))
     val uiState: StateFlow<FarmerDetailUiState> = _uiState.asStateFlow()
 
     init {

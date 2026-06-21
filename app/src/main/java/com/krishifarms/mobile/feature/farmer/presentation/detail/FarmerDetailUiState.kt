@@ -6,4 +6,5 @@ data class FarmerDetailUiState(
     val farmer: Farmer? = null,
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
+    val canEdit: Boolean = false,
 )

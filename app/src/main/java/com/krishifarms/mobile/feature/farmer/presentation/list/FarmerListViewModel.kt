@@ -3,6 +3,8 @@ package com.krishifarms.mobile.feature.farmer.presentation.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krishifarms.mobile.core.common.NetworkMonitor
+import com.krishifarms.mobile.core.security.rbac.ActionPermissions
+import com.krishifarms.mobile.core.security.rbac.PermissionManager
 import com.krishifarms.mobile.feature.farmer.domain.repository.FarmerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +20,12 @@ import javax.inject.Inject
 class FarmerListViewModel @Inject constructor(
     private val repository: FarmerRepository,
     private val networkMonitor: NetworkMonitor,
+    permissionManager: PermissionManager,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(FarmerListUiState())
+    private val actions = ActionPermissions.from(permissionManager)
+
+    private val _uiState = MutableStateFlow(FarmerListUiState(canCreate = actions.farmer.canCreate))
     val uiState: StateFlow<FarmerListUiState> = _uiState.asStateFlow()
 
     private val searchQuery = MutableStateFlow("")

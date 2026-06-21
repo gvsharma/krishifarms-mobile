@@ -22,6 +22,17 @@
 
     <!-- Navigation -->
     <string name="nav_dashboard">డాష్‌బోర్డ్</string>
+    <string name="bottom_nav_home">హోమ్</string>
+    <string name="bottom_nav_operations">ఆపరేషన్స్</string>
+    <string name="bottom_nav_collect">సేకరణ</string>
+    <string name="bottom_nav_finance">ఫైనాన్స్</string>
+    <string name="bottom_nav_more">మరిన్ని</string>
+
+    <!-- RBAC -->
+    <string name="rbac_access_denied_title">ప్రవేశం నిరాకరించబడింది</string>
+    <string name="rbac_access_denied_message">ఈ స్క్రీన్‌ను చూడటానికి మీకు అనుమతి లేదు.</string>
+    <string name="rbac_go_to_dashboard">డాష్‌బోర్డ్‌కు వెళ్లండి</string>
+    <string name="rbac_route_forbidden">ఆ మాడ్యూల్‌కు మీకు ప్రవేశం లేదు.</string>
     <string name="nav_farmers">రైతులు</string>
     <string name="nav_farms">పొలాలు</string>
     <string name="nav_procurement">సేకరణ</string>

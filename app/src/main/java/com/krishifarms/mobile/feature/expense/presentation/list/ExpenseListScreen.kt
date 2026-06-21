@@ -95,8 +95,10 @@ fun ExpenseListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onCreateClick) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.expense_add))
+            if (uiState.canCreate) {
+                FloatingActionButton(onClick = onCreateClick) {
+                    Icon(Icons.Default.Add, contentDescription = stringResource(R.string.expense_add))
+                }
             }
         },
     ) { padding ->

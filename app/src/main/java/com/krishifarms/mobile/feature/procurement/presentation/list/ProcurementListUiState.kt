@@ -8,4 +8,5 @@ data class ProcurementListUiState(
     val errorMessage: String? = null,
     val isRefreshing: Boolean = false,
     val isOffline: Boolean = false,
+    val canCreate: Boolean = false,
 )

@@ -10,5 +10,8 @@ data class UserSessionEntity(
     val mobile: String,
     val email: String?,
     val role: String?,
+    val rolesJson: String? = null,
+    val permissionsJson: String? = null,
+    val accessibleModulesJson: String? = null,
     val lastLoginAt: Long,
 )

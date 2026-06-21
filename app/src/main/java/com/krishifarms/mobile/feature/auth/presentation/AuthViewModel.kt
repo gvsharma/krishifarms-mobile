@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krishifarms.mobile.core.common.Constants
 import com.krishifarms.mobile.core.common.Result
+import com.krishifarms.mobile.core.security.session.SessionManager
 import com.krishifarms.mobile.feature.auth.domain.repository.AuthRepository
 import com.krishifarms.mobile.feature.auth.presentation.login.AuthValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,6 +38,7 @@ sealed interface LoginUiState {
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val sessionManager: SessionManager,
 ) : ViewModel() {
 
     private val _sessionState = MutableStateFlow<SessionState>(SessionState.Loading)
@@ -120,6 +122,7 @@ class AuthViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch {
             authRepository.logout()
+            sessionManager.clear()
             _sessionState.value = SessionState.Unauthenticated
             _loginUiState.value = LoginUiState.Form()
         }

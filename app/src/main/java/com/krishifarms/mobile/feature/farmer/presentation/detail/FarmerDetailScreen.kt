@@ -60,8 +60,10 @@ fun FarmerDetailScreen(
                 },
                 actions = {
                     uiState.farmer?.let { farmer ->
-                        IconButton(onClick = { onEdit(farmer.id) }) {
-                            Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.farmer_edit))
+                        if (uiState.canEdit) {
+                            IconButton(onClick = { onEdit(farmer.id) }) {
+                                Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.farmer_edit))
+                            }
                         }
                     }
                 },

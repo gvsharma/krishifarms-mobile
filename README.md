@@ -99,6 +99,7 @@ krishifarms-mobile/
 │   ├── AGENTS.md                 # Primary AI agent onboarding guide
 │   ├── DESIGN_SYSTEM.md          # Colors, typography, shapes, KfCard, font attribution
 │   ├── PRODUCT_ARCHITECTURE.md   # Product spec: design system, nav, phases, migration
+│   ├── RBAC_IMPLEMENTATION_PLAN.md  # Permission-driven UI rollout plan
 │   ├── ARCHITECTURE.md           # Layer architecture reference
 │   └── SYNC_ENGINE.md            # Offline sync engine reference
 ├── .cursor/rules/
@@ -152,7 +153,7 @@ Status reflects **code completeness** and **navigation wiring** in `MainNavGraph
 | **Expense** | ✅ | ✅ | 2–3 | Approval flow Phase 3 |
 | **Document** | ✅ | ✅ | 1 | CameraX capture, upload, preview |
 | **Sync engine** | ✅ | — | 1–3 | See [docs/SYNC_ENGINE.md](docs/SYNC_ENGINE.md) |
-| **Design system / Bottom nav** | 🔶 / ❌ | — | 1 | Canopia-inspired M3 theme + `KfCard`; see [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md); drawer shell today |
+| **Design system / Bottom nav** | 🔶 | ✅ | 1 | 5-tab `MainBottomNav` + dynamic RBAC drawer; full hub grids still stub |
 | **Farms** | 🔶 | stub | 1 | Room entity exists; UI stub |
 | **Collections** | ❌ | stub | 2 | Fast-entry — P0 Phase 2 |
 | **Farmer payments / Payments** | ❌ / 🔶 | stub | 2–3 | Payments entity exists |
@@ -218,7 +219,9 @@ MainActivity
 
 **Session gate** (`KrishiFarmsNavHost`): observes `AuthViewModel.sessionState` and redirects among loading, login, and main graph.
 
-**Main shell** (`MainNavGraph`): `ModalNavigationDrawer` + `Scaffold` + inner `NavHost`. Drawer lists all modules from `MainFeatureDestinations`.
+**Main shell** (`MainNavGraph`): dynamic RBAC-filtered drawer + `MainBottomNav` (5 tabs) + guarded `NavHost`. Menu visibility from `accessibleModules`; route/action gates from `permissions`.
+
+**RBAC:** Login/refresh responses include `roles`, `permissions`, `accessibleModules`. Debug builds use `RBAC_STRICT_MODE=false` (legacy: empty permissions → all modules). Release enforces strict mode.
 
 ### Registering a new feature route
 
@@ -331,6 +334,7 @@ Quick pointers:
 | **[docs/AGENTS.md](docs/AGENTS.md)** | **Primary AI agent guide** — start here every session |
 | **[docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)** | **Design tokens** — Canopia-inspired colors, typography, shapes, components |
 | **[docs/PRODUCT_ARCHITECTURE.md](docs/PRODUCT_ARCHITECTURE.md)** | **Product spec** — multi-module layout, design system, bottom nav, wireframes, roles, phased rollout, migration |
+| **[docs/RBAC_IMPLEMENTATION_PLAN.md](docs/RBAC_IMPLEMENTATION_PLAN.md)** | **RBAC rollout** — permission-driven UI, session model, navigation guards, phased migration |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Layer architecture: Clean Architecture, Room schema, security, sync protocol |
 | [docs/SYNC_ENGINE.md](docs/SYNC_ENGINE.md) | Sync queue, handlers, WorkManager, conflict resolution |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines and doc-update expectations for humans |
