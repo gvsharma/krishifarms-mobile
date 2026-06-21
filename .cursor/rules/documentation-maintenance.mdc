@@ -1,0 +1,37 @@
+---
+description: Require documentation updates alongside every code change in KrishiFarms Mobile
+alwaysApply: true
+---
+
+# Documentation maintenance
+
+On **any** code change in this repo, update relevant docs in the **same PR/commit**. Never leave module status tables stale.
+
+## Single source of truth
+
+`docs/AGENTS.md` is the primary agent onboarding guide. Keep its module table and repository map accurate.
+
+## What to update
+
+| Change type | Files to update |
+|-------------|-----------------|
+| New or completed feature module | `docs/AGENTS.md` module table · `README.md` § Implemented Modules · navigation notes if routes changed |
+| New navigation route / wiring | `docs/AGENTS.md` module table · `README.md` § Navigation |
+| New top-level dir or package | `docs/AGENTS.md` repository map |
+| Sync engine (handlers, queue, workers) | `docs/SYNC_ENGINE.md` · `docs/AGENTS.md` if handler registry changes |
+| Architecture / layer boundaries | `docs/ARCHITECTURE.md` · cross-check `docs/AGENTS.md` invariants |
+| Build, SDK, API URL, branch info | `README.md` Quick Reference |
+| New doc file | `README.md` Documentation section · link from `docs/AGENTS.md` |
+
+## Minimum checklist before finishing a task
+
+1. Did module status (✅ / 🔶 / ❌) change? → Update `docs/AGENTS.md` + `README.md`.
+2. Did sync behavior change? → Update `docs/SYNC_ENGINE.md`.
+3. Did you add user-facing strings? → Both `values/strings.xml` and `values-te/strings.xml` (not docs, but required).
+4. Did you add a new package? → `docs/AGENTS.md` repository map.
+
+## Do not
+
+- Ship feature work without updating the module status table.
+- Duplicate long architecture prose in commits — edit the canonical doc file instead.
+- Let `README.md` and `docs/AGENTS.md` module tables diverge.

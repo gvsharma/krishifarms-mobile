@@ -2,7 +2,9 @@
 
 Internal Android CRM for KrishiFarms field and office operations — farmer management, crop procurement, workforce, expenses, and document capture. Built **offline-first** for low-connectivity rural areas; syncs to a FastAPI backend when online.
 
-> **Audience:** Engineers and agentic IDEs (Cursor, etc.) starting a new session on this repo.
+> **🤖 AI agents (Cursor, Copilot, etc.):** Start every session with **[docs/AGENTS.md](docs/AGENTS.md)** — session checklist, repository map, module status, implementation patterns, and documentation maintenance contract.
+
+> **Audience:** Engineers and agentic IDEs starting a new session on this repo.
 
 ---
 
@@ -94,7 +96,11 @@ krishifarms-mobile/
 │           ├── values/strings.xml
 │           └── values-te/strings.xml
 ├── docs/
-│   └── ARCHITECTURE.md           # Full architecture design doc
+│   ├── AGENTS.md                 # Primary AI agent onboarding guide
+│   ├── ARCHITECTURE.md           # Full architecture design doc
+│   └── SYNC_ENGINE.md            # Offline sync engine reference
+├── .cursor/rules/
+│   └── documentation-maintenance.mdc
 ├── gradle/
 │   ├── libs.versions.toml        # Version catalog
 │   └── wrapper/
@@ -142,16 +148,15 @@ Status reflects **code completeness** and **navigation wiring** in `MainNavGraph
 | **Procurement** | ✅ | ✅ | List, detail, create form + `ProcurementSyncHandler` (create-focused) |
 | **Worker** | ✅ | ✅ | Workers, work orders, attendance + `WorkerSyncHandler` |
 | **Expense** | ✅ | ✅ | List, detail, form + `ExpenseSyncHandler`; dashboard KPI navigates to list |
-| **Document** | 🔶 | ❌ | Domain + `DocumentSyncHandler` + `DocumentUploadWorker`; no UI |
+| **Document** | ✅ | ✅ | List, CameraX capture, upload, preview; `DocumentSyncHandler` + `DocumentUploadWorker` |
 | **Sync engine** | ✅ | — | Implemented — queue, handlers, WorkManager; see [docs/SYNC_ENGINE.md](docs/SYNC_ENGINE.md) |
 | **Farms** | ❌ | stub | `FeatureStubScreen` only |
 | **Farmer payments** | ❌ | stub | Placeholder |
 | **Collections / Payments** | ❌ | stub | Placeholder |
 | **Vehicles / Trips** | ❌ | stub | Placeholder |
 | **Assets / Rentals** | ❌ | stub | Placeholder |
-| **Documents** | ✅ | ✅ | CameraX capture, gallery, preview, compress, upload; drawer → list |
 | **Settings** | ❌ | stub | Logout hook present on stub |
-| **Sync status UI** | 🔶 | ❌ | `SyncStatusIndicator` + `SyncDebugScreen` in `core/ui`; `Routes.SYNC` still stub |
+| **Sync status UI** | 🔶 | stub | `SyncStatusIndicator` + `SyncDebugScreen` exist; `Routes.SYNC` still uses stub |
 
 Legend: ✅ complete · 🔶 partial · ❌ not started / stub only
 
@@ -306,95 +311,26 @@ Debug builds point at the **staging** API. Release builds use production URL and
 
 ## 11. For AI Agents
 
-This section helps agentic IDEs implement features consistently without re-discovering patterns each session.
+**Full guide:** [docs/AGENTS.md](docs/AGENTS.md) — session startup checklist, repository map, module status table, step-by-step feature implementation, architecture invariants, do-not-do list, and documentation maintenance contract.
 
-### Where to start for a new feature
+Quick pointers:
 
-1. Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) §3 (package structure) and §7 (repository design)
-2. Study a **complete reference module**: `feature/farmer` or `feature/procurement`
-3. Check `MainNavGraph.kt` for whether the route is stubbed or wired
-4. Check `core/database/entity/Entities.kt` and `Daos.kt` for existing tables
-5. Check `core/sync/di/SyncModule.kt` for registered sync handlers
-
-### Files to read first
-
-| Purpose | Path |
-|---------|------|
-| App entry + DI root | `KrishiFarmsApplication.kt`, `core/di/` |
-| Navigation | `core/navigation/KrishiFarmsNavHost.kt`, `MainNavGraph.kt`, `Routes.kt` |
-| Database | `core/database/KrishiFarmsDatabase.kt`, `entity/Entities.kt`, `dao/Daos.kt` |
-| Sync engine | `core/sync/SyncEngine.kt`, `core/sync/di/SyncModule.kt`, `core/sync/handler/` |
-| Reference feature | `feature/farmer/` (full stack) or `feature/procurement/` |
-| Network setup | `core/di/NetworkModule.kt`, `core/network/ApiServices.kt` |
-
-### Patterns to follow
-
-Copy the **farmer** or **procurement** module structure:
-
-```
-feature/<name>/
-├── data/
-│   ├── remote/       # Retrofit API + DTOs
-│   ├── mapper/       # Entity ↔ Domain ↔ DTO
-│   └── repository/   # RepositoryImpl
-├── domain/
-│   ├── model/
-│   └── repository/   # Interface
-├── presentation/
-│   ├── list/         # Screen + ViewModel + UiState
-│   ├── detail/
-│   └── form/
-├── di/<Name>Module.kt
-└── navigation/<Name>Navigation.kt
-```
-
-### Do NOT duplicate sync / upload logic
-
-- **Enqueue changes** via `OfflineSyncEngine` and `SyncEnqueueExtensions` (`enqueueCreate`, `enqueueUpdate`, `enqueueDelete`)
-- **Add a `SyncHandler`** in `core/sync/handler/` and register it in `SyncModule.kt`
-- **Document / media uploads** → use `DocumentSyncHandler` + `DocumentUploadWorker` in `core/sync/worker/` — do not build a parallel upload pipeline
-- **Schedule background work** via `SyncScheduler` / existing WorkManager workers
-
-### Hilt module location pattern
-
-- **Core bindings**: `core/di/` (`NetworkModule`, `DatabaseModule`, `RepositoryModule`, `SyncModule`)
-- **Feature bindings**: `feature/<name>/di/<Name>Module.kt`
-  - `@Binds` repository interface → impl
-  - `@Provides` Retrofit API from `@Named("authenticated_retrofit")`
-
-### Navigation registration pattern
-
-1. Define routes in `Routes.kt` or `<Feature>Routes.kt`
-2. Implement `fun NavGraphBuilder.<feature>Graph(navController: NavController)` in `feature/<name>/navigation/`
-3. Add `import` and call inside `MainNavGraph` → `NavHost { }`
-4. Remove the corresponding `FeatureStubScreen` composable
-
-Example (farmer):
-
-```kotlin
-// MainNavGraph.kt NavHost block
-farmerGraph(navController)
-```
-
-### Known open items
-
-| Item | Detail |
-|------|--------|
-| **Login field mismatch** | App sends `mobile` in `LoginRequest`; confirm backend accepts `mobile` vs `email` — align DTO and validation if backend differs |
-| **Document UI missing** | Sync/upload infrastructure exists; no capture/list screens |
-| **Settings / sync status UI** | Settings stub; wire `SyncDebugScreen` at `Routes.SYNC` (`SyncStatusIndicator` in `core/ui`) |
-| **Multi-module Gradle split** | Planned in `settings.gradle.kts` comments; not yet executed |
-| **CI / Android SDK** | No `.github/workflows` yet — Android SDK not configured in CI |
-| **Package name in ARCHITECTURE.md** | Doc uses `com.krishifarms.crm`; **actual code uses `com.krishifarms.mobile`** |
+- **Reference modules:** `feature/farmer` (full CRUD) or `feature/procurement`
+- **Navigation:** check `MainNavGraph.kt` for stubs vs wired routes
+- **Sync:** `core/sync/SyncEngine.kt` + handlers in `core/sync/di/SyncModule.kt` — never duplicate sync logic
+- **Docs rule:** `.cursor/rules/documentation-maintenance.mdc` — update docs with every code change
 
 ---
 
-## 12. Documentation Index
+## 12. Documentation
 
-| Document | Description |
-|----------|-------------|
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Full architecture: layers, navigation topology, offline sync design, Room schema, security, rollout phases |
-| [docs/SYNC_ENGINE.md](docs/SYNC_ENGINE.md) | Sync engine reference: queue, handlers, WorkManager, conflict resolution, UI components |
+| Document | Purpose |
+|----------|---------|
+| **[docs/AGENTS.md](docs/AGENTS.md)** | **Primary AI agent guide** — start here every session |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Target architecture: layers, navigation, Room schema, security, rollout phases |
+| [docs/SYNC_ENGINE.md](docs/SYNC_ENGINE.md) | Sync queue, handlers, WorkManager, conflict resolution |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines and doc-update expectations for humans |
+| [.cursor/rules/documentation-maintenance.mdc](.cursor/rules/documentation-maintenance.mdc) | Cursor rule enforcing doc updates with code changes |
 
 ---
 
